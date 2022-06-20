@@ -35,7 +35,9 @@ function App() {
       skipAutoScale: false,
       canvasWidth: 1080,
       canvasHeight: 1080,
-      style: { scale: "2"},
+      backgroundColor: "#1DA1F2",
+      pixelRatio: 4,
+      style: { width: "900px", margin: "30% 20%", verticalAlign: "center" },
     }).then((dataUrl) => {
         const link = document.createElement("a");
         link.download = "my-image-name.png";
@@ -71,25 +73,23 @@ function App() {
               Tweet source:<br/>
               <input value={tweetSource} onChange={(e)=> {updateTweetSource(e.target.value);}} />
             </label><br/>
-            <button onClick={onButtonClick} type={"button"}>Download tweet</button>
+            <button onClick={onButtonClick} type={"button"}>Download tweet (might take a moment)</button>
           </form>
         </div>
-        <div className="column" ref={ref} id="exportContainer">
-          <TweetCard
-            author={{
-              name: tweetUser,
-              username: tweetUsername,
-              image: tweetUserAvatar,
-            }}
-            tweet={tweetContent}
-            time={tweetTimestamp}
-            source={tweetSource}
-            fitInsideContainer={false}
-            style={{
-              margin: "10px auto",
-              width: "90%",
-            }}
-          />
+        <div className="column">
+          <div ref={ref} id="exportContainer">
+            <TweetCard
+              author={{
+                name: tweetUser,
+                username: tweetUsername,
+                image: tweetUserAvatar,
+              }}
+              tweet={tweetContent}
+              time={tweetTimestamp}
+              source={tweetSource}
+              fitInsideContainer={true}
+            />
+          </div>
         </div>
       </div>
     </div>

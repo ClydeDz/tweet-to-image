@@ -1,5 +1,5 @@
 body {
-  background-color: #282c34;
+  background-color: #1DA1F2;
   color: white;
 }
 
@@ -7,9 +7,15 @@ body {
   color: #61dafb;
 }
 
+button {
+  margin: 9px 0;
+  cursor: pointer;
+}
+
 #exportContainer {
-  width: 50%;
-  aspect-ratio: 1 /1;
+  width: 650px;
+  height: 250px;
+  margin: 10px auto;
 }
 
 .row {
