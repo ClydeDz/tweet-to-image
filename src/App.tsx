@@ -97,7 +97,7 @@ function App() {
               time={tweetTimestamp}
               source={tweetSource}
               fitInsideContainer={false}
-              style={{width: "650px"}}
+              style={{fontSize: "19px"}}
             />
           </div>
         </div>
