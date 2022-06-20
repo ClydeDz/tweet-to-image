@@ -1,9 +1,9 @@
-import React, { ReactEventHandler, useCallback, useEffect, useRef, useState } from 'react';
-import './App.css';
-import TweetCard from 'react-tweet-card';
-import { toPng } from 'html-to-image';
+import { useCallback, useEffect, useRef, useState } from "react";
+import "./App.css";
+import TweetCard from "react-tweet-card";
+import { toPng } from "html-to-image";
 
-const getTwitterAvatarUrl = (username: string) => {
+const getTwitterAvatarUrl = (username: string): string => {
   return `https://unavatar.io/twitter/${username}`;
 };
 
