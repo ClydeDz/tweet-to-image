@@ -87,7 +87,7 @@ function App() {
               tweet={tweetContent}
               time={tweetTimestamp}
               source={tweetSource}
-              fitInsideContainer={true}
+              fitInsideContainer={false}
             />
           </div>
         </div>
