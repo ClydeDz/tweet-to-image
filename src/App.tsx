@@ -13,6 +13,7 @@ function App() {
   const [tweetSource, updateTweetSource] = useState<string>("Twitter for iPhone");
   const [tweetUser, updateTweetUser] = useState<string>("Twitter");
   const [tweetUsername, updateTweetUsername] = useState<string>("officialtwitter");
+  const [isUserVerified, updateIsUserVerified] = useState<boolean>(false);
   const [tweetTimestamp, updateTweetTimestamp] = useState<Date>(new Date());
   const [tweetUserAvatar, updateTweetAvatar] = useState<string>(getTwitterAvatarUrl("twitter"));
 
@@ -64,7 +65,14 @@ function App() {
                 updateTweetUsername(e.target.value);
                 updateTweetAvatar(getTwitterAvatarUrl(e.target.value));
               }} />
-            </label><br/>
+            </label><br/><br/>
+            <label>
+              <input type="checkbox"
+                defaultChecked={isUserVerified}
+                onChange={(e)=> {updateIsUserVerified(e.target.checked);}}
+              />
+              I'm verified
+            </label><br/><br/>
             <label>
               Tweet content:<br/>
               <input value={tweetContent} onChange={(e)=> {updateTweetContent(e.target.value);}} />
@@ -83,6 +91,7 @@ function App() {
                 name: tweetUser,
                 username: tweetUsername,
                 image: tweetUserAvatar,
+                isVerified: isUserVerified,
               }}
               tweet={tweetContent}
               time={tweetTimestamp}
