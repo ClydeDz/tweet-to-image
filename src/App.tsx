@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
 import TweetCard from "react-tweet-card";
 import { toPng } from "html-to-image";
+import { Button } from "@mantine/core";
 
 const getTwitterAvatarUrl = (username: string): string => {
   return `https://unavatar.io/twitter/${username}?
@@ -112,7 +113,7 @@ function App() {
               Tweet source:<br/>
               <input value={tweetSource} onChange={(e)=> {updateTweetSource(e.target.value);}} />
             </label><br/>
-            <button onClick={onButtonClick} type={"button"}>Download tweet (might take a moment)</button>
+            <Button onClick={onButtonClick} type={"button"}>Download tweet (might take a moment)</Button>
           </form>
         </div>
         <div className="column">
