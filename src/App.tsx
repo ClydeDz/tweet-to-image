@@ -38,7 +38,6 @@ function App() {
       canvasHeight: 1080,
       backgroundColor: "#1DA1F2",
       pixelRatio: 4,
-      style: { width: "900px", margin: "30% 20%", verticalAlign: "center" },
     }).then((dataUrl) => {
         const link = document.createElement("a");
         link.download = "my-image-name.png";
@@ -52,6 +51,37 @@ function App() {
 
   return (
     <div className="App">
+      <div style={{display: "none"}}>
+        <div className="outer" ref={ref}>
+          <div className="middle">
+            <div className="inner">
+              <div id="exportContainer">
+                <TweetCard
+                  author={{
+                    name: tweetUser,
+                    username: tweetUsername,
+                    image: tweetUserAvatar,
+                    isVerified: isUserVerified,
+                  }}
+                  tweet={tweetContent}
+                  time={tweetTimestamp}
+                  source={tweetSource}
+                  fitInsideContainer={false}
+                  className="tweet-card"
+                  clickableProfileLink={false}
+                  showEngagement={true}
+                  engagement={{
+                    likes: 98,
+                    replies: 57,
+                    retweets: 10,
+                  }}
+                  style={{fontSize: "14px"}}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="row">
         <div className="column">
           <form>
@@ -85,7 +115,7 @@ function App() {
           </form>
         </div>
         <div className="column">
-          <div ref={ref} id="exportContainer">
+          <div>
             <TweetCard
               author={{
                 name: tweetUser,
@@ -97,6 +127,13 @@ function App() {
               time={tweetTimestamp}
               source={tweetSource}
               fitInsideContainer={false}
+              clickableProfileLink={false}
+              showEngagement={true}
+              engagement={{
+                likes: 98,
+                replies: 57,
+                retweets: 10,
+              }}
               style={{fontSize: "19px"}}
             />
           </div>
