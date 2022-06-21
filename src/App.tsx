@@ -4,7 +4,8 @@ import TweetCard from "react-tweet-card";
 import { toPng } from "html-to-image";
 
 const getTwitterAvatarUrl = (username: string): string => {
-  return `https://unavatar.io/twitter/${username}`;
+  return `https://unavatar.io/twitter/${username}?
+    fallback=https://source.boringavatars.com/marble/350/${username}`;
 };
 
 function App() {
