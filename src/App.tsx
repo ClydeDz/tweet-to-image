@@ -24,6 +24,7 @@ function App() {
   const [tweetTimestamp, updateTweetTimestamp] = useState<Date>(new Date());
   const [tweetUserAvatar, updateTweetAvatar] = useState<string>(getTwitterAvatarUrl("twitter"));
   const [tweetEngagement, updateTweetEngagement] = useState<string>("false");
+  const [isImageDownloading, updateIsImageDownloading] = useState<boolean>(false);
 
   useEffect(()=> {
     const interval: NodeJS.Timer = setInterval(()=>{
@@ -36,6 +37,8 @@ function App() {
     if (ref.current === null) {
       return;
     }
+
+    updateIsImageDownloading(true);
 
     toPng(ref.current, {
       cacheBust: true,
@@ -51,9 +54,11 @@ function App() {
         link.download = "my-image-name.png";
         link.href = dataUrl;
         link.click();
+        updateIsImageDownloading(false);
       })
       .catch((err: any) => {
         console.log(err);
+        updateIsImageDownloading(false);
       });
   }, [ref]);
 
@@ -142,8 +147,9 @@ function App() {
             <Button
               onClick={onButtonClick}
               type={"button"}
-              className="field">
-              Download tweet (might take a moment)
+              className="field"
+              loading={isImageDownloading}>
+              Download tweet as an image
             </Button>
           </form>
         </Grid.Col>
