@@ -75,7 +75,7 @@ function App() {
         console.log(err);
         updateIsImageDownloading(false);
       });
-  }, [ref]);
+  }, [ref, tweetBackgroundColor]);
 
   return (
     <>
