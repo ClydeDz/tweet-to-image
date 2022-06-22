@@ -2,7 +2,21 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
 import TweetCard from "react-tweet-card";
 import { toPng } from "html-to-image";
-import { Button, ColorInput, Grid, Radio, RadioGroup, Switch, Textarea, TextInput } from "@mantine/core";
+import {
+  Accordion,
+  Button,
+  ColorInput,
+  Grid,
+  Radio,
+  RadioGroup,
+  Switch,
+  Textarea,
+  TextInput,
+  Title,
+  Text,
+  Anchor,
+  Center
+} from "@mantine/core";
 import { At } from "tabler-icons-react";
 
 const getTwitterAvatarUrl = (username: string): string => {
@@ -97,6 +111,29 @@ function App() {
         </div>
       </div>
       <Grid justify="center" grow gutter="xs" style={{marginRight: "0"}}>
+        <Grid.Col className="header-container">
+          <Title order={1} align="center">Tweet to image</Title>
+          <Text align="center">Download a Tweet as an Instagram-ready image</Text>
+          <Center>
+            <Anchor href="https://mantine.dev/" target="_blank" align="center" className="anchor">
+              About
+            </Anchor>
+            <Anchor href="https://mantine.dev/" target="_blank" align="center" className="anchor">
+              Have an idea?
+            </Anchor>
+            <Anchor href="https://mantine.dev/" target="_blank" align="center" className="anchor">
+              Report an issue
+            </Anchor>
+            <Anchor href="https://mantine.dev/" target="_blank" align="center" className="anchor">
+              Support
+            </Anchor>
+            <Anchor href="https://mantine.dev/" target="_blank" align="center" className="anchor">
+              Developed by Clyde D'Souza
+            </Anchor>
+          </Center>
+        </Grid.Col>
+      </Grid>
+      <Grid justify="center" grow gutter="xs" style={{marginRight: "0"}}>
         <Grid.Col className="form-container" xs={12} sm={12} md={6} lg={6} xl={6}>
           <form>
             <TextInput
@@ -130,26 +167,31 @@ function App() {
               value={tweetContent}
               onChange={(e)=> {updateTweetContent(e.target.value);}}
             />
-            <TextInput
-              label="Twitter source"
-              className="field"
-              value={tweetSource}
-              onChange={(e)=> {updateTweetSource(e.target.value);}}
-            />
-            <RadioGroup
-              label="Tweet engagement"
-              onChange={updateTweetEngagement}
-              value={tweetEngagement}
-              className="field checkbox-field"
-            >
-              <Radio value="false" label="Hide" />
-              <Radio value="true" label="Randomize numbers" />
-            </RadioGroup>
-            <ColorInput
-              value={tweetBackgroundColor}
-              label="Tweet background color"
-              className="field"
-              onChange={updateTweetBackgroundColor} />
+            <Accordion>
+              <Accordion.Item label="Advance configuration">
+                <TextInput
+                  label="Twitter source"
+                  className="field"
+                  value={tweetSource}
+                  onChange={(e)=> {updateTweetSource(e.target.value);}}
+                />
+                <RadioGroup
+                  label="Tweet engagement"
+                  onChange={updateTweetEngagement}
+                  value={tweetEngagement}
+                  className="field checkbox-field"
+                >
+                  <Radio value="false" label="Hide" />
+                  <Radio value="true" label="Randomize numbers" />
+                </RadioGroup>
+                <ColorInput
+                  value={tweetBackgroundColor}
+                  label="Tweet background color"
+                  className="field"
+                  onChange={updateTweetBackgroundColor}
+                />
+              </Accordion.Item>
+            </Accordion>
             <Button
               onClick={onButtonClick}
               type={"button"}

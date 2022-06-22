@@ -6,6 +6,10 @@
   padding: 5%;
 }
 
+.header-container {
+  padding: 2%;
+}
+
 .field {
   margin: 9px 0;
 }
@@ -32,4 +36,12 @@
   margin-left: auto;
   margin-right: auto;
   width: 400px;
+}
+
+.anchor {
+  margin-right: 9px;
+}
+
+.anchor:last-child {
+  margin-right: 0;
 }
