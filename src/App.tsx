@@ -3,6 +3,7 @@ import "./App.css";
 import TweetCard from "react-tweet-card";
 import { toPng } from "html-to-image";
 import { Button, Checkbox, Grid, Textarea, TextInput } from "@mantine/core";
+import { At } from "tabler-icons-react";
 
 const getTwitterAvatarUrl = (username: string): string => {
   return `https://unavatar.io/twitter/${username}?
@@ -90,11 +91,14 @@ function App() {
             <TextInput
               label="Twitter name"
               value={tweetUser}
+              className="field"
               onChange={(e)=> {updateTweetUser(e.target.value);}}
             />
             <TextInput
               label="Twitter username"
               value={tweetUsername}
+              className="field"
+              icon={<At size={14} />}
               onChange={(e)=> {
                 updateTweetUsername(e.target.value);
                 updateTweetAvatar(getTwitterAvatarUrl(e.target.value));
@@ -102,21 +106,28 @@ function App() {
             />
             <Checkbox
               label="I'm verified"
+              className="field checkbox-field"
               checked={isUserVerified}
               onChange={(e)=> {updateIsUserVerified(e.target.checked);}}
             />
             <Textarea
-              placeholder="Your comment"
+              className="field"
               label="Tweet content"
               value={tweetContent}
               onChange={(e)=> {updateTweetContent(e.target.value);}}
             />
             <TextInput
               label="Twitter source"
+              className="field"
               value={tweetSource}
               onChange={(e)=> {updateTweetSource(e.target.value);}}
             />
-            <Button onClick={onButtonClick} type={"button"}>Download tweet (might take a moment)</Button>
+            <Button
+              onClick={onButtonClick}
+              type={"button"}
+              className="field">
+              Download tweet (might take a moment)
+            </Button>
           </form>
         </Grid.Col>
         <Grid.Col className="tweet-card-container" xs={12} sm={12} md={6} lg={6} xl={6}>

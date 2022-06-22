@@ -7,6 +7,14 @@
   padding: 10%;
 }
 
+.field {
+  margin: 9px 0;
+}
+
+.checkbox-field {
+  margin: 18px 0 14px 0;
+}
+
 .outer {
   display: table;
   position: absolute;
