@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
 import TweetCard from "react-tweet-card";
 import { toPng } from "html-to-image";
-import { Button, Grid, Radio, RadioGroup, Switch, Textarea, TextInput } from "@mantine/core";
+import { Button, ColorInput, Grid, Radio, RadioGroup, Switch, Textarea, TextInput } from "@mantine/core";
 import { At } from "tabler-icons-react";
 
 const getTwitterAvatarUrl = (username: string): string => {
@@ -24,6 +24,7 @@ function App() {
   const [tweetTimestamp, updateTweetTimestamp] = useState<Date>(new Date());
   const [tweetUserAvatar, updateTweetAvatar] = useState<string>(getTwitterAvatarUrl("twitter"));
   const [tweetEngagement, updateTweetEngagement] = useState<string>("false");
+  const [tweetBackgroundColor, updateTweetBackgroundColor] = useState<string>("#1DA1F2");
   const [isImageDownloading, updateIsImageDownloading] = useState<boolean>(false);
 
   useEffect(()=> {
@@ -47,7 +48,7 @@ function App() {
       skipAutoScale: false,
       canvasWidth: 1080,
       canvasHeight: 1080,
-      backgroundColor: "#1DA1F2",
+      backgroundColor: tweetBackgroundColor,
       pixelRatio: 4,
     }).then((dataUrl) => {
         const link = document.createElement("a");
@@ -82,7 +83,7 @@ function App() {
                   fitInsideContainer={false}
                   className="tweet-card"
                   clickableProfileLink={false}
-                  showEngagement={true}
+                  showEngagement={toBoolean(tweetEngagement)}
                   engagement={{
                     likes: 98,
                     replies: 57,
@@ -144,6 +145,11 @@ function App() {
               <Radio value="false" label="Hide" />
               <Radio value="true" label="Randomize numbers" />
             </RadioGroup>
+            <ColorInput
+              value={tweetBackgroundColor}
+              label="Tweet background color"
+              className="field"
+              onChange={updateTweetBackgroundColor} />
             <Button
               onClick={onButtonClick}
               type={"button"}
@@ -153,7 +159,7 @@ function App() {
             </Button>
           </form>
         </Grid.Col>
-        <Grid.Col className="tweet-card-container" xs={12} sm={12} md={6} lg={6} xl={6}>
+        <Grid.Col className="tweet-card-container" xs={12} sm={12} md={6} lg={6} xl={6} style={{backgroundColor:`${tweetBackgroundColor}`}}>
           <div>
             <TweetCard
               author={{
