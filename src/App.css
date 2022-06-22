@@ -1,35 +1,47 @@
-body {
-  background-color: #1DA1F2;
-  color: white;
+.tweet-card-container {
+  padding: 10%;
 }
 
-.App-link {
-  color: #61dafb;
+.form-container {
+  padding: 5%;
 }
 
-button {
-  margin: 9px 0;
-  cursor: pointer;
-}
-
-#exportContainer {
-  width: 650px;
-}
-
-.row {
-  display: flex;
+.header-container {
   padding: 2%;
 }
 
-.column:first-child {
-  flex: 40%;
+.field {
+  margin: 9px 0;
 }
 
-.column:last-child {
-  flex: 60%;
+.checkbox-field {
+  margin: 18px 0 14px 0;
 }
 
-.column:first-child > form {
-  width: 150px;
-  margin: 9px auto;
+.outer {
+  display: table;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1080px;
+  width: 1080px;
+}
+
+.middle {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.inner {
+  margin-left: auto;
+  margin-right: auto;
+  width: 400px;
+}
+
+.anchor {
+  margin-right: 9px;
+}
+
+.anchor:last-child {
+  margin-right: 0;
 }

@@ -2,9 +2,30 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
 import TweetCard from "react-tweet-card";
 import { toPng } from "html-to-image";
+import {
+  Accordion,
+  Button,
+  ColorInput,
+  Grid,
+  Radio,
+  RadioGroup,
+  Switch,
+  Textarea,
+  TextInput,
+  Title,
+  Text,
+  Anchor,
+  Center
+} from "@mantine/core";
+import { At } from "tabler-icons-react";
 
 const getTwitterAvatarUrl = (username: string): string => {
-  return `https://unavatar.io/twitter/${username}`;
+  return `https://unavatar.io/twitter/${username}?
+    fallback=https://source.boringavatars.com/marble/350/${username}`;
+};
+
+const toBoolean = (value: string): boolean => {
+  return value.toLowerCase()==="true";
 };
 
 function App() {
@@ -16,6 +37,9 @@ function App() {
   const [isUserVerified, updateIsUserVerified] = useState<boolean>(false);
   const [tweetTimestamp, updateTweetTimestamp] = useState<Date>(new Date());
   const [tweetUserAvatar, updateTweetAvatar] = useState<string>(getTwitterAvatarUrl("twitter"));
+  const [tweetEngagement, updateTweetEngagement] = useState<string>("false");
+  const [tweetBackgroundColor, updateTweetBackgroundColor] = useState<string>("#1DA1F2");
+  const [isImageDownloading, updateIsImageDownloading] = useState<boolean>(false);
 
   useEffect(()=> {
     const interval: NodeJS.Timer = setInterval(()=>{
@@ -29,6 +53,8 @@ function App() {
       return;
     }
 
+    updateIsImageDownloading(true);
+
     toPng(ref.current, {
       cacheBust: true,
       width: 1080,
@@ -36,56 +62,147 @@ function App() {
       skipAutoScale: false,
       canvasWidth: 1080,
       canvasHeight: 1080,
-      backgroundColor: "#1DA1F2",
+      backgroundColor: tweetBackgroundColor,
       pixelRatio: 4,
-      style: { width: "900px", margin: "30% 20%", verticalAlign: "center" },
     }).then((dataUrl) => {
         const link = document.createElement("a");
         link.download = "my-image-name.png";
         link.href = dataUrl;
         link.click();
+        updateIsImageDownloading(false);
       })
       .catch((err: any) => {
         console.log(err);
+        updateIsImageDownloading(false);
       });
-  }, [ref]);
+  }, [ref, tweetBackgroundColor]);
 
   return (
-    <div className="App">
-      <div className="row">
-        <div className="column">
+    <>
+      <div style={{display: "none"}}>
+        <div className="outer" ref={ref}>
+          <div className="middle">
+            <div className="inner">
+              <div id="exportContainer">
+                <TweetCard
+                  author={{
+                    name: tweetUser,
+                    username: tweetUsername,
+                    image: tweetUserAvatar,
+                    isVerified: isUserVerified,
+                  }}
+                  tweet={tweetContent}
+                  time={tweetTimestamp}
+                  source={tweetSource}
+                  fitInsideContainer={false}
+                  className="tweet-card"
+                  clickableProfileLink={false}
+                  showEngagement={toBoolean(tweetEngagement)}
+                  engagement={{
+                    likes: 98,
+                    replies: 57,
+                    retweets: 10,
+                  }}
+                  style={{fontSize: "14px"}}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Grid justify="center" grow gutter="xs" style={{marginRight: "0"}}>
+        <Grid.Col className="header-container">
+          <Title order={1} align="center">Tweet to image</Title>
+          <Text align="center">Download a Tweet as an Instagram-ready image</Text>
+          <Center>
+            <Anchor href="https://mantine.dev/" target="_blank" align="center" className="anchor">
+              About
+            </Anchor>
+            <Anchor href="https://mantine.dev/" target="_blank" align="center" className="anchor">
+              Have an idea?
+            </Anchor>
+            <Anchor href="https://mantine.dev/" target="_blank" align="center" className="anchor">
+              Report an issue
+            </Anchor>
+            <Anchor href="https://mantine.dev/" target="_blank" align="center" className="anchor">
+              Support
+            </Anchor>
+            <Anchor href="https://mantine.dev/" target="_blank" align="center" className="anchor">
+              Developed by Clyde D'Souza
+            </Anchor>
+          </Center>
+        </Grid.Col>
+      </Grid>
+      <Grid justify="center" grow gutter="xs" style={{marginRight: "0"}}>
+        <Grid.Col className="form-container" xs={12} sm={12} md={6} lg={6} xl={6}>
           <form>
-            <label>
-              Twitter name:<br/>
-              <input value={tweetUser} onChange={(e)=> {updateTweetUser(e.target.value);}} />
-            </label><br/>
-            <label>
-              Twitter username:<br/>
-              <input value={tweetUsername} onChange={(e)=> {
+            <TextInput
+              label="Twitter name"
+              value={tweetUser}
+              className="field"
+              onChange={(e)=> {updateTweetUser(e.target.value);}}
+            />
+            <TextInput
+              label="Twitter username"
+              value={tweetUsername}
+              className="field"
+              icon={<At size={14} />}
+              onChange={(e)=> {
                 updateTweetUsername(e.target.value);
                 updateTweetAvatar(getTwitterAvatarUrl(e.target.value));
-              }} />
-            </label><br/><br/>
-            <label>
-              <input type="checkbox"
-                defaultChecked={isUserVerified}
-                onChange={(e)=> {updateIsUserVerified(e.target.checked);}}
-              />
-              I'm verified
-            </label><br/><br/>
-            <label>
-              Tweet content:<br/>
-              <input value={tweetContent} onChange={(e)=> {updateTweetContent(e.target.value);}} />
-            </label><br/>
-            <label>
-              Tweet source:<br/>
-              <input value={tweetSource} onChange={(e)=> {updateTweetSource(e.target.value);}} />
-            </label><br/>
-            <button onClick={onButtonClick} type={"button"}>Download tweet (might take a moment)</button>
+              }}
+            />
+            <Switch
+              label="I'm verified"
+              className="field checkbox-field"
+              checked={isUserVerified}
+              onChange={(e)=> {updateIsUserVerified(e.target.checked);}}
+            />
+            <Textarea
+              label="Tweet content"
+              autosize
+              minRows={2}
+              maxRows={4}
+              className="field"
+              value={tweetContent}
+              onChange={(e)=> {updateTweetContent(e.target.value);}}
+            />
+            <Accordion>
+              <Accordion.Item label="Advance configuration">
+                <TextInput
+                  label="Twitter source"
+                  className="field"
+                  value={tweetSource}
+                  onChange={(e)=> {updateTweetSource(e.target.value);}}
+                />
+                <RadioGroup
+                  label="Tweet engagement"
+                  onChange={updateTweetEngagement}
+                  value={tweetEngagement}
+                  className="field checkbox-field"
+                >
+                  <Radio value="false" label="Hide" />
+                  <Radio value="true" label="Randomize numbers" />
+                </RadioGroup>
+                <ColorInput
+                  value={tweetBackgroundColor}
+                  label="Tweet background color"
+                  className="field"
+                  onChange={updateTweetBackgroundColor}
+                />
+              </Accordion.Item>
+            </Accordion>
+            <Button
+              onClick={onButtonClick}
+              type={"button"}
+              className="field"
+              loading={isImageDownloading}>
+              Download tweet as an image
+            </Button>
           </form>
-        </div>
-        <div className="column">
-          <div ref={ref} id="exportContainer">
+        </Grid.Col>
+        <Grid.Col className="tweet-card-container" xs={12} sm={12} md={6} lg={6} xl={6} style={{backgroundColor:`${tweetBackgroundColor}`}}>
+          <div>
             <TweetCard
               author={{
                 name: tweetUser,
@@ -97,12 +214,19 @@ function App() {
               time={tweetTimestamp}
               source={tweetSource}
               fitInsideContainer={false}
-              style={{fontSize: "19px"}}
+              clickableProfileLink={false}
+              showEngagement={toBoolean(tweetEngagement)}
+              engagement={{
+                likes: 98,
+                replies: 57,
+                retweets: 10,
+              }}
+              style={{fontSize: "12px"}}
             />
           </div>
-        </div>
-      </div>
-    </div>
+        </Grid.Col>
+      </Grid>
+    </>
   );
 }
 
