@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
 import TweetCard from "react-tweet-card";
 import { toPng } from "html-to-image";
-import { Button, Checkbox, Textarea, TextInput } from "@mantine/core";
+import { Button, Checkbox, Grid, Textarea, TextInput } from "@mantine/core";
 
 const getTwitterAvatarUrl = (username: string): string => {
   return `https://unavatar.io/twitter/${username}?
@@ -52,7 +52,7 @@ function App() {
   }, [ref]);
 
   return (
-    <div className="App">
+    <>
       <div style={{display: "none"}}>
         <div className="outer" ref={ref}>
           <div className="middle">
@@ -84,8 +84,8 @@ function App() {
           </div>
         </div>
       </div>
-      <div className="row">
-        <div className="column">
+      <Grid justify="center" grow gutter="xs" style={{marginRight: "0"}}>
+        <Grid.Col className="form-container" xs={12} sm={12} md={6} lg={6} xl={6}>
           <form>
             <TextInput
               label="Twitter name"
@@ -118,8 +118,8 @@ function App() {
             />
             <Button onClick={onButtonClick} type={"button"}>Download tweet (might take a moment)</Button>
           </form>
-        </div>
-        <div className="column">
+        </Grid.Col>
+        <Grid.Col className="tweet-card-container" xs={12} sm={12} md={6} lg={6} xl={6}>
           <div>
             <TweetCard
               author={{
@@ -139,12 +139,12 @@ function App() {
                 replies: 57,
                 retweets: 10,
               }}
-              style={{fontSize: "19px"}}
+              style={{fontSize: "14px"}}
             />
           </div>
-        </div>
-      </div>
-    </div>
+        </Grid.Col>
+      </Grid>
+    </>
   );
 }
 

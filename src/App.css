@@ -1,15 +1,10 @@
-body {
+.tweet-card-container {
   background-color: #1DA1F2;
-  color: white;
+  padding: 10%;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-button {
-  margin: 9px 0;
-  cursor: pointer;
+.form-container {
+  padding: 10%;
 }
 
 .outer {
@@ -30,22 +25,4 @@ button {
   margin-left: auto;
   margin-right: auto;
   width: 400px;
-}
-
-.row {
-  display: flex;
-  padding: 2%;
-}
-
-.column:first-child {
-  flex: 40%;
-}
-
-.column:last-child {
-  flex: 60%;
-}
-
-.column:first-child > form {
-  width: 350px;
-  margin: 9px auto;
 }
