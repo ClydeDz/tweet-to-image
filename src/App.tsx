@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
 import TweetCard from "react-tweet-card";
 import { toPng } from "html-to-image";
-import { Button } from "@mantine/core";
+import { Button, Checkbox, Textarea, TextInput } from "@mantine/core";
 
 const getTwitterAvatarUrl = (username: string): string => {
   return `https://unavatar.io/twitter/${username}?
@@ -87,32 +87,35 @@ function App() {
       <div className="row">
         <div className="column">
           <form>
-            <label>
-              Twitter name:<br/>
-              <input value={tweetUser} onChange={(e)=> {updateTweetUser(e.target.value);}} />
-            </label><br/>
-            <label>
-              Twitter username:<br/>
-              <input value={tweetUsername} onChange={(e)=> {
+            <TextInput
+              label="Twitter name"
+              value={tweetUser}
+              onChange={(e)=> {updateTweetUser(e.target.value);}}
+            />
+            <TextInput
+              label="Twitter username"
+              value={tweetUsername}
+              onChange={(e)=> {
                 updateTweetUsername(e.target.value);
                 updateTweetAvatar(getTwitterAvatarUrl(e.target.value));
-              }} />
-            </label><br/><br/>
-            <label>
-              <input type="checkbox"
-                defaultChecked={isUserVerified}
-                onChange={(e)=> {updateIsUserVerified(e.target.checked);}}
-              />
-              I'm verified
-            </label><br/><br/>
-            <label>
-              Tweet content:<br/>
-              <input value={tweetContent} onChange={(e)=> {updateTweetContent(e.target.value);}} />
-            </label><br/>
-            <label>
-              Tweet source:<br/>
-              <input value={tweetSource} onChange={(e)=> {updateTweetSource(e.target.value);}} />
-            </label><br/>
+              }}
+            />
+            <Checkbox
+              label="I'm verified"
+              checked={isUserVerified}
+              onChange={(e)=> {updateIsUserVerified(e.target.checked);}}
+            />
+            <Textarea
+              placeholder="Your comment"
+              label="Tweet content"
+              value={tweetContent}
+              onChange={(e)=> {updateTweetContent(e.target.value);}}
+            />
+            <TextInput
+              label="Twitter source"
+              value={tweetSource}
+              onChange={(e)=> {updateTweetSource(e.target.value);}}
+            />
             <Button onClick={onButtonClick} type={"button"}>Download tweet (might take a moment)</Button>
           </form>
         </div>
