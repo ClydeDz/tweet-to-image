@@ -2,12 +2,16 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import "./App.css";
 import TweetCard from "react-tweet-card";
 import { toPng } from "html-to-image";
-import { Button, Checkbox, Grid, Textarea, TextInput } from "@mantine/core";
+import { Button, Grid, Radio, RadioGroup, Switch, Textarea, TextInput } from "@mantine/core";
 import { At } from "tabler-icons-react";
 
 const getTwitterAvatarUrl = (username: string): string => {
   return `https://unavatar.io/twitter/${username}?
     fallback=https://source.boringavatars.com/marble/350/${username}`;
+};
+
+const toBoolean = (value: string): boolean => {
+  return value.toLowerCase()==="true";
 };
 
 function App() {
@@ -19,6 +23,7 @@ function App() {
   const [isUserVerified, updateIsUserVerified] = useState<boolean>(false);
   const [tweetTimestamp, updateTweetTimestamp] = useState<Date>(new Date());
   const [tweetUserAvatar, updateTweetAvatar] = useState<string>(getTwitterAvatarUrl("twitter"));
+  const [tweetEngagement, updateTweetEngagement] = useState<string>("false");
 
   useEffect(()=> {
     const interval: NodeJS.Timer = setInterval(()=>{
@@ -104,15 +109,18 @@ function App() {
                 updateTweetAvatar(getTwitterAvatarUrl(e.target.value));
               }}
             />
-            <Checkbox
+            <Switch
               label="I'm verified"
               className="field checkbox-field"
               checked={isUserVerified}
               onChange={(e)=> {updateIsUserVerified(e.target.checked);}}
             />
             <Textarea
-              className="field"
               label="Tweet content"
+              autosize
+              minRows={2}
+              maxRows={4}
+              className="field"
               value={tweetContent}
               onChange={(e)=> {updateTweetContent(e.target.value);}}
             />
@@ -122,6 +130,15 @@ function App() {
               value={tweetSource}
               onChange={(e)=> {updateTweetSource(e.target.value);}}
             />
+            <RadioGroup
+              label="Tweet engagement"
+              onChange={updateTweetEngagement}
+              value={tweetEngagement}
+              className="field checkbox-field"
+            >
+              <Radio value="false" label="Hide" />
+              <Radio value="true" label="Randomize numbers" />
+            </RadioGroup>
             <Button
               onClick={onButtonClick}
               type={"button"}
@@ -144,13 +161,13 @@ function App() {
               source={tweetSource}
               fitInsideContainer={false}
               clickableProfileLink={false}
-              showEngagement={true}
+              showEngagement={toBoolean(tweetEngagement)}
               engagement={{
                 likes: 98,
                 replies: 57,
                 retweets: 10,
               }}
-              style={{fontSize: "14px"}}
+              style={{fontSize: "12px"}}
             />
           </div>
         </Grid.Col>
