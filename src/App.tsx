@@ -115,19 +115,20 @@ function App() {
           <Title order={1} align="center">Tweet to image</Title>
           <Text align="center">Download a Tweet as an Instagram-ready image</Text>
           <Center>
-            <Anchor href="https://mantine.dev/" target="_blank" align="center" className="anchor">
-              About
-            </Anchor>
-            <Anchor href="https://mantine.dev/" target="_blank" align="center" className="anchor">
+            <Anchor href="https://github.com/ClydeDz/tweet-to-image/issues/new/choose"
+              target="_blank" align="center" className="anchor">
               Have an idea?
             </Anchor>
-            <Anchor href="https://mantine.dev/" target="_blank" align="center" className="anchor">
+            <Anchor href="https://github.com/ClydeDz/tweet-to-image/issues/new/choose"
+              target="_blank" align="center" className="anchor">
               Report an issue
             </Anchor>
-            <Anchor href="https://mantine.dev/" target="_blank" align="center" className="anchor">
+            <Anchor href="https://sponsor.clydedsouza.net/" target="_blank"
+              align="center" className="anchor">
               Support
             </Anchor>
-            <Anchor href="https://mantine.dev/" target="_blank" align="center" className="anchor">
+            <Anchor href="https://clydedsouza.net/" target="_blank" 
+              align="center" className="anchor">
               Developed by Clyde D'Souza
             </Anchor>
           </Center>
