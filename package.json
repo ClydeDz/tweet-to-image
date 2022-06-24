@@ -1,5 +1,6 @@
 {
   "name": "tweet-to-image",
+  "description": "Tweet to Image — Download a Tweet as an Instagram-Ready Image",
   "version": "0.1.0",
   "private": true,
   "homepage": "https://clydedz.github.io/tweet-to-image/",
