@@ -161,11 +161,13 @@ function App() {
             />
             <Textarea
               label="Tweet content"
+              description="A maximum of 280 characters"
               autosize
               minRows={2}
               maxRows={4}
               className="field"
               value={tweetContent}
+              maxLength={280}
               onChange={(e)=> {updateTweetContent(e.target.value);}}
             />
             <Accordion>
