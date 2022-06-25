@@ -21,17 +21,17 @@ export const getRandomTweetEngagement = (): ITweetEngagement => {
 
 export const getDefaultTwitterConfiguration = (): ITweetConfiguration => {
     return {
-        TweetContent: "What a radical idea!",
-        TweetSource: "Twitter for iPhone",
-        TweetUser: "Twitter",
-        TweetUsername: "officialtwitter",
-        IsUserVerified: false,
-        TweetTimestamp: new Date(),
-        TweetUserAvatar: getTwitterAvatarUrl("twitter"),
-        ShowTweetEngagement: "false",
-        TweetEngagement: getRandomTweetEngagement(),
-        TweetBackgroundColor: "#1DA1F2",
-        IsImageDownloading: false,
+        tweetContent: "What a radical idea!",
+        tweetSource: "Twitter for iPhone",
+        tweetUser: "Twitter",
+        tweetUsername: "officialtwitter",
+        isUserVerified: false,
+        tweetTimestamp: new Date(),
+        tweetUserAvatar: getTwitterAvatarUrl("twitter"),
+        showTweetEngagement: "false",
+        tweetEngagement: getRandomTweetEngagement(),
+        tweetBackgroundColor: "#1DA1F2",
+        isImageDownloading: false,
     };
 };
 

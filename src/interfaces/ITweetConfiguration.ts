@@ -1,15 +1,15 @@
 import { ITweetEngagement } from "./ITweetEngagement";
 
 export interface ITweetConfiguration {
-    TweetContent: string;
-    TweetSource: string;
-    TweetUser: string;
-    TweetUsername: string;
-    IsUserVerified: boolean;
-    TweetTimestamp: Date;
-    TweetUserAvatar: string;
-    ShowTweetEngagement: string;
-    TweetEngagement?: ITweetEngagement;
-    TweetBackgroundColor: string;
-    IsImageDownloading: boolean;
+    tweetContent: string;
+    tweetSource: string;
+    tweetUser: string;
+    tweetUsername: string;
+    isUserVerified: boolean;
+    tweetTimestamp: Date;
+    tweetUserAvatar: string;
+    showTweetEngagement: string;
+    tweetEngagement?: ITweetEngagement;
+    tweetBackgroundColor: string;
+    isImageDownloading: boolean;
 }
