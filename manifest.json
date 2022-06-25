@@ -1,11 +1,21 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Tweet to Image",
+  "name": "Tweet to Image — Download a Tweet as an Instagram-Ready Image",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "logo32.png",
+      "sizes": "32x32 24x24 16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "logo64.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "logo128.png",
+      "type": "image/png",
+      "sizes": "128x128"
     },
     {
       "src": "logo192.png",
@@ -13,13 +23,13 @@
       "sizes": "192x192"
     },
     {
-      "src": "logo512.png",
+      "src": "logo1080.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "1080x1080"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#1da1f2",
   "background_color": "#ffffff"
 }
