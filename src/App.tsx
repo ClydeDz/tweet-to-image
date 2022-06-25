@@ -17,17 +17,24 @@ import { At } from "tabler-icons-react";
 import AppHeader from "./components/AppHeader/AppHeader";
 import { ITweetConfiguration } from "./interfaces/ITweetConfiguration";
 import { getTwitterAvatarUrl, toBoolean, getDefaultTwitterConfiguration, getRandomFilename, getRandomTweetEngagement } from "./utils/Util";
+import { updateTweetConfigurationState, updateTweetUser, updateTweetTimestamp } from "./redux/slice";
+import { useAppDispatch, useAppSelector } from "./redux/hooks";
 
 function App() {
+  const tweetConfigurationState: ITweetConfiguration = useAppSelector((state) => state.tweetConfiguration);
+  const dispatch = useAppDispatch();
   const ref = useRef(null);
   const [tweetConfiguration, updateTweetConfiguration] = useState<ITweetConfiguration>(getDefaultTwitterConfiguration());
 
+  // console.log("use selector", tweetConfigurationState.tweetTimestamp);
+  // console.log("use selector", tweetConfigurationState.tweetUser);
+
   useEffect(()=> {
     const interval: NodeJS.Timer = setInterval(() => {
-      updateTweetConfiguration({...tweetConfiguration, tweetTimestamp: new Date()});
+      dispatch(updateTweetTimestamp(new Date()));
     }, 1000);
     return () => clearInterval(interval);
-  }, [tweetConfiguration]);
+  }, [dispatch]);
 
   const onButtonClick = useCallback(() => {
     if (ref.current === null) {
@@ -76,7 +83,7 @@ function App() {
               <div id="exportContainer">
                 <TweetCard
                   author={{
-                    name: tweetConfiguration.tweetUser,
+                    name: tweetConfigurationState.tweetUser,
                     username: tweetConfiguration.tweetUsername,
                     image: tweetConfiguration.tweetUserAvatar,
                     isVerified: tweetConfiguration.isUserVerified,
@@ -106,12 +113,11 @@ function App() {
           <form>
             <TextInput
               label="Twitter name"
-              value={tweetConfiguration.tweetUser}
+              value={tweetConfigurationState.tweetUser}
               className="field"
-              onChange={(e)=> {updateTweetConfiguration({
-                ...tweetConfiguration,
-                tweetUser: e.target.value,
-              });}}
+              onChange={(e)=> {
+                dispatch(updateTweetUser(e.target.value));
+              }}
             />
             <TextInput
               label="Twitter username"
@@ -198,7 +204,7 @@ function App() {
           <div>
             <TweetCard
               author={{
-                name: tweetConfiguration.tweetUser,
+                name: tweetConfigurationState.tweetUser,
                 username: tweetConfiguration.tweetUsername,
                 image: tweetConfiguration.tweetUserAvatar,
                 isVerified: tweetConfiguration.isUserVerified,
