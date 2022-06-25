@@ -16,7 +16,7 @@ import {
 import { At } from "tabler-icons-react";
 import AppHeader from "./components/AppHeader/AppHeader";
 import { ITweetConfiguration } from "./interfaces/ITweetConfiguration";
-import { getTwitterAvatarUrl, toBoolean, getDefaultTwitterConfiguration, getRandomFilename } from "./utils/Util";
+import { getTwitterAvatarUrl, toBoolean, getDefaultTwitterConfiguration, getRandomFilename, getRandomTweetEngagement } from "./utils/Util";
 
 function App() {
   const ref = useRef(null);
@@ -86,13 +86,9 @@ function App() {
                   source={tweetConfiguration.TweetSource}
                   fitInsideContainer={false}
                   clickableProfileLink={false}
-                  showEngagement={toBoolean(tweetConfiguration.TweetEngagement)}
+                  showEngagement={toBoolean(tweetConfiguration.ShowTweetEngagement)}
                   className="tweet-card"
-                  engagement={{
-                    likes: 98,
-                    replies: 57,
-                    retweets: 10,
-                  }}
+                  engagement={tweetConfiguration.TweetEngagement}
                   style={{fontSize: "14px"}}
                 />
               </div>
@@ -166,11 +162,12 @@ function App() {
                 />
                 <RadioGroup
                   label="Tweet engagement"
-                  onChange={(e)=> {updateTweetConfiguration({
+                  onChange={(fieldValue)=> {updateTweetConfiguration({
                     ...tweetConfiguration,
-                    TweetEngagement: e,
+                    ShowTweetEngagement: fieldValue,
+                    TweetEngagement: toBoolean(fieldValue) ? getRandomTweetEngagement(): tweetConfiguration.TweetEngagement,
                   });}}
-                  value={tweetConfiguration.TweetEngagement}
+                  value={tweetConfiguration.ShowTweetEngagement}
                   className="field checkbox-field"
                 >
                   <Radio value="false" label="Hide" />
@@ -196,7 +193,8 @@ function App() {
             </Button>
           </form>
         </Grid.Col>
-        <Grid.Col className="tweet-card-container" xs={12} sm={12} md={6} lg={6} xl={6} style={{backgroundColor:`${tweetConfiguration.TweetBackgroundColor}`}}>
+        <Grid.Col className="tweet-card-container" xs={12} sm={12} md={6} lg={6} xl={6}
+          style={{backgroundColor:`${tweetConfiguration.TweetBackgroundColor}`}}>
           <div>
             <TweetCard
               author={{
@@ -210,12 +208,8 @@ function App() {
               source={tweetConfiguration.TweetSource}
               fitInsideContainer={false}
               clickableProfileLink={false}
-              showEngagement={toBoolean(tweetConfiguration.TweetEngagement)}
-              engagement={{
-                likes: 98,
-                replies: 57,
-                retweets: 10,
-              }}
+              showEngagement={toBoolean(tweetConfiguration.ShowTweetEngagement)}
+              engagement={tweetConfiguration.TweetEngagement}
               style={{fontSize: "12px"}}
             />
           </div>
