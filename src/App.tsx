@@ -25,32 +25,54 @@ const toBoolean = (value: string): boolean => {
   return value.toLowerCase()==="true";
 };
 
+interface ITweetConfiguration {
+  TweetContent: string;
+  TweetSource: string;
+  TweetUser: string;
+  TweetUsername: string;
+  IsUserVerified: boolean;
+  TweetTimestamp: Date;
+  TweetUserAvatar: string;
+  TweetEngagement: string;
+  TweetBackgroundColor: string;
+  IsImageDownloading: boolean;
+}
+
+const getDefaultTwitterConfiguration = (): ITweetConfiguration => {
+  return {
+    TweetContent: "What a radical idea!",
+    TweetSource: "Twitter for iPhone",
+    TweetUser: "Twitter",
+    TweetUsername: "officialtwitter",
+    IsUserVerified: false,
+    TweetTimestamp: new Date(),
+    TweetUserAvatar: getTwitterAvatarUrl("twitter"),
+    TweetEngagement: "false",
+    TweetBackgroundColor: "#1DA1F2",
+    IsImageDownloading: false,
+  };
+};
+
 function App() {
   const ref = useRef(null);
-  const [tweetContent, updateTweetContent] = useState<string>("What a radical idea!");
-  const [tweetSource, updateTweetSource] = useState<string>("Twitter for iPhone");
-  const [tweetUser, updateTweetUser] = useState<string>("Twitter");
-  const [tweetUsername, updateTweetUsername] = useState<string>("officialtwitter");
-  const [isUserVerified, updateIsUserVerified] = useState<boolean>(false);
-  const [tweetTimestamp, updateTweetTimestamp] = useState<Date>(new Date());
-  const [tweetUserAvatar, updateTweetAvatar] = useState<string>(getTwitterAvatarUrl("twitter"));
-  const [tweetEngagement, updateTweetEngagement] = useState<string>("false");
-  const [tweetBackgroundColor, updateTweetBackgroundColor] = useState<string>("#1DA1F2");
-  const [isImageDownloading, updateIsImageDownloading] = useState<boolean>(false);
+  const [tweetConfiguration, updateTweetConfiguration] = useState<ITweetConfiguration>(getDefaultTwitterConfiguration());
 
   useEffect(()=> {
-    const interval: NodeJS.Timer = setInterval(()=>{
-      updateTweetTimestamp(new Date());
+    const interval: NodeJS.Timer = setInterval(() => {
+      updateTweetConfiguration({...tweetConfiguration, TweetTimestamp: new Date()});
     }, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [tweetConfiguration]);
 
   const onButtonClick = useCallback(() => {
     if (ref.current === null) {
       return;
     }
 
-    updateIsImageDownloading(true);
+    updateTweetConfiguration({
+      ...tweetConfiguration,
+      IsImageDownloading: true,
+    });
 
     toPng(ref.current, {
       cacheBust: true,
@@ -59,20 +81,26 @@ function App() {
       skipAutoScale: false,
       canvasWidth: 1080,
       canvasHeight: 1080,
-      backgroundColor: tweetBackgroundColor,
+      backgroundColor: tweetConfiguration.TweetBackgroundColor,
       pixelRatio: 4,
     }).then((dataUrl) => {
         const link = document.createElement("a");
         link.download = "my-image-name.png";
         link.href = dataUrl;
         link.click();
-        updateIsImageDownloading(false);
+        updateTweetConfiguration({
+          ...tweetConfiguration,
+          IsImageDownloading: false,
+        });
       })
       .catch((err: any) => {
         console.log(err);
-        updateIsImageDownloading(false);
+        updateTweetConfiguration({
+          ...tweetConfiguration,
+          IsImageDownloading: false,
+        });
       });
-  }, [ref, tweetBackgroundColor]);
+  }, [ref, tweetConfiguration]);
 
   return (
     <>
@@ -83,18 +111,18 @@ function App() {
               <div id="exportContainer">
                 <TweetCard
                   author={{
-                    name: tweetUser,
-                    username: tweetUsername,
-                    image: tweetUserAvatar,
-                    isVerified: isUserVerified,
+                    name: tweetConfiguration.TweetUser,
+                    username: tweetConfiguration.TweetUsername,
+                    image: tweetConfiguration.TweetUserAvatar,
+                    isVerified: tweetConfiguration.IsUserVerified,
                   }}
-                  tweet={tweetContent}
-                  time={tweetTimestamp}
-                  source={tweetSource}
+                  tweet={tweetConfiguration.TweetContent}
+                  time={tweetConfiguration.TweetTimestamp}
+                  source={tweetConfiguration.TweetSource}
                   fitInsideContainer={false}
-                  className="tweet-card"
                   clickableProfileLink={false}
-                  showEngagement={toBoolean(tweetEngagement)}
+                  showEngagement={toBoolean(tweetConfiguration.TweetEngagement)}
+                  className="tweet-card"
                   engagement={{
                     likes: 98,
                     replies: 57,
@@ -117,25 +145,34 @@ function App() {
           <form>
             <TextInput
               label="Twitter name"
-              value={tweetUser}
+              value={tweetConfiguration.TweetUser}
               className="field"
-              onChange={(e)=> {updateTweetUser(e.target.value);}}
+              onChange={(e)=> {updateTweetConfiguration({
+                ...tweetConfiguration,
+                TweetUser: e.target.value,
+              });}}
             />
             <TextInput
               label="Twitter username"
-              value={tweetUsername}
+              value={tweetConfiguration.TweetUsername}
               className="field"
               icon={<At size={14} />}
               onChange={(e)=> {
-                updateTweetUsername(e.target.value);
-                updateTweetAvatar(getTwitterAvatarUrl(e.target.value));
+                updateTweetConfiguration({
+                  ...tweetConfiguration,
+                  TweetUsername: e.target.value,
+                  TweetUserAvatar: getTwitterAvatarUrl(e.target.value),
+                });
               }}
             />
             <Switch
               label="I'm verified"
               className="field checkbox-field"
-              checked={isUserVerified}
-              onChange={(e)=> {updateIsUserVerified(e.target.checked);}}
+              checked={tweetConfiguration.IsUserVerified}
+              onChange={(e)=> {updateTweetConfiguration({
+                ...tweetConfiguration,
+                IsUserVerified: e.target.checked,
+              });}}
             />
             <Textarea
               label="Tweet content"
@@ -144,32 +181,44 @@ function App() {
               minRows={2}
               maxRows={4}
               className="field"
-              value={tweetContent}
+              value={tweetConfiguration.TweetContent}
               maxLength={280}
-              onChange={(e)=> {updateTweetContent(e.target.value);}}
+              onChange={(e)=> {updateTweetConfiguration({
+                ...tweetConfiguration,
+                TweetContent: e.target.value,
+              });}}
             />
             <Accordion>
               <Accordion.Item label="Advance configuration">
                 <TextInput
                   label="Twitter source"
                   className="field"
-                  value={tweetSource}
-                  onChange={(e)=> {updateTweetSource(e.target.value);}}
+                  value={tweetConfiguration.TweetSource}
+                  onChange={(e)=> {updateTweetConfiguration({
+                    ...tweetConfiguration,
+                    TweetSource: e.target.value,
+                  });}}
                 />
                 <RadioGroup
                   label="Tweet engagement"
-                  onChange={updateTweetEngagement}
-                  value={tweetEngagement}
+                  onChange={(e)=> {updateTweetConfiguration({
+                    ...tweetConfiguration,
+                    TweetEngagement: e,
+                  });}}
+                  value={tweetConfiguration.TweetEngagement}
                   className="field checkbox-field"
                 >
                   <Radio value="false" label="Hide" />
                   <Radio value="true" label="Randomize numbers" />
                 </RadioGroup>
                 <ColorInput
-                  value={tweetBackgroundColor}
+                  value={tweetConfiguration.TweetBackgroundColor}
                   label="Tweet background color"
                   className="field"
-                  onChange={updateTweetBackgroundColor}
+                  onChange={(e)=> {updateTweetConfiguration({
+                    ...tweetConfiguration,
+                    TweetBackgroundColor: e,
+                  });}}
                 />
               </Accordion.Item>
             </Accordion>
@@ -177,26 +226,26 @@ function App() {
               onClick={onButtonClick}
               type={"button"}
               className="field"
-              loading={isImageDownloading}>
+              loading={tweetConfiguration.IsImageDownloading}>
               Download tweet as an image
             </Button>
           </form>
         </Grid.Col>
-        <Grid.Col className="tweet-card-container" xs={12} sm={12} md={6} lg={6} xl={6} style={{backgroundColor:`${tweetBackgroundColor}`}}>
+        <Grid.Col className="tweet-card-container" xs={12} sm={12} md={6} lg={6} xl={6} style={{backgroundColor:`${tweetConfiguration.TweetBackgroundColor}`}}>
           <div>
             <TweetCard
               author={{
-                name: tweetUser,
-                username: tweetUsername,
-                image: tweetUserAvatar,
-                isVerified: isUserVerified,
+                name: tweetConfiguration.TweetUser,
+                username: tweetConfiguration.TweetUsername,
+                image: tweetConfiguration.TweetUserAvatar,
+                isVerified: tweetConfiguration.IsUserVerified,
               }}
-              tweet={tweetContent}
-              time={tweetTimestamp}
-              source={tweetSource}
+              tweet={tweetConfiguration.TweetContent}
+              time={tweetConfiguration.TweetTimestamp}
+              source={tweetConfiguration.TweetSource}
               fitInsideContainer={false}
               clickableProfileLink={false}
-              showEngagement={toBoolean(tweetEngagement)}
+              showEngagement={toBoolean(tweetConfiguration.TweetEngagement)}
               engagement={{
                 likes: 98,
                 replies: 57,
