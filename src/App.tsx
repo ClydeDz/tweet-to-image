@@ -16,7 +16,7 @@ import {
 import { At } from "tabler-icons-react";
 import AppHeader from "./components/AppHeader/AppHeader";
 import { ITweetConfiguration } from "./interfaces/ITweetConfiguration";
-import { getTwitterAvatarUrl, toBoolean, getDefaultTwitterConfiguration } from "./utils/Util";
+import { getTwitterAvatarUrl, toBoolean, getDefaultTwitterConfiguration, getRandomFilename } from "./utils/Util";
 
 function App() {
   const ref = useRef(null);
@@ -50,7 +50,7 @@ function App() {
       pixelRatio: 4,
     }).then((dataUrl) => {
         const link = document.createElement("a");
-        link.download = "my-image-name.png";
+        link.download = getRandomFilename();
         link.href = dataUrl;
         link.click();
         updateTweetConfiguration({

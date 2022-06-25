@@ -1,3 +1,4 @@
+import { adjectives, animals, colors, uniqueNamesGenerator } from "unique-names-generator";
 import { ITweetConfiguration } from "../interfaces/ITweetConfiguration";
 
 export const getTwitterAvatarUrl = (username: string): string => {
@@ -22,4 +23,12 @@ export const getDefaultTwitterConfiguration = (): ITweetConfiguration => {
         TweetBackgroundColor: "#1DA1F2",
         IsImageDownloading: false,
     };
+};
+
+export const getRandomFilename = (): string => {
+    const randomName: string = uniqueNamesGenerator({
+        dictionaries: [adjectives, colors, animals],
+        separator: "-",
+    });
+    return `${randomName}.png`;
 };
