@@ -1,5 +1,6 @@
 {
   "name": "tweet-to-image",
+  "description": "Tweet to Image — Download a Tweet as an Instagram-Ready Image",
   "version": "0.1.0",
   "private": true,
   "homepage": "https://clydedz.github.io/tweet-to-image/",
@@ -17,9 +18,10 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
-    "react-tweet-card": "^0.1.7",
+    "react-tweet-card": "^0.1.8",
     "tabler-icons-react": "^1.50.0",
     "typescript": "^4.7.4",
+    "unique-names-generator": "^4.7.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

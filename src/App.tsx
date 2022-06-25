@@ -12,48 +12,32 @@ import {
   Switch,
   Textarea,
   TextInput,
-  Title,
-  Text,
-  Anchor,
-  Center
 } from "@mantine/core";
 import { At } from "tabler-icons-react";
-
-const getTwitterAvatarUrl = (username: string): string => {
-  return `https://unavatar.io/twitter/${username}?
-    fallback=https://source.boringavatars.com/marble/350/${username}`;
-};
-
-const toBoolean = (value: string): boolean => {
-  return value.toLowerCase()==="true";
-};
+import AppHeader from "./components/AppHeader/AppHeader";
+import { ITweetConfiguration } from "./interfaces/ITweetConfiguration";
+import { getTwitterAvatarUrl, toBoolean, getDefaultTwitterConfiguration, getRandomFilename, getRandomTweetEngagement } from "./utils/Util";
 
 function App() {
   const ref = useRef(null);
-  const [tweetContent, updateTweetContent] = useState<string>("What a radical idea!");
-  const [tweetSource, updateTweetSource] = useState<string>("Twitter for iPhone");
-  const [tweetUser, updateTweetUser] = useState<string>("Twitter");
-  const [tweetUsername, updateTweetUsername] = useState<string>("officialtwitter");
-  const [isUserVerified, updateIsUserVerified] = useState<boolean>(false);
-  const [tweetTimestamp, updateTweetTimestamp] = useState<Date>(new Date());
-  const [tweetUserAvatar, updateTweetAvatar] = useState<string>(getTwitterAvatarUrl("twitter"));
-  const [tweetEngagement, updateTweetEngagement] = useState<string>("false");
-  const [tweetBackgroundColor, updateTweetBackgroundColor] = useState<string>("#1DA1F2");
-  const [isImageDownloading, updateIsImageDownloading] = useState<boolean>(false);
+  const [tweetConfiguration, updateTweetConfiguration] = useState<ITweetConfiguration>(getDefaultTwitterConfiguration());
 
   useEffect(()=> {
-    const interval: NodeJS.Timer = setInterval(()=>{
-      updateTweetTimestamp(new Date());
+    const interval: NodeJS.Timer = setInterval(() => {
+      updateTweetConfiguration({...tweetConfiguration, tweetTimestamp: new Date()});
     }, 1000);
     return () => clearInterval(interval);
-  }, []);
+  }, [tweetConfiguration]);
 
   const onButtonClick = useCallback(() => {
     if (ref.current === null) {
       return;
     }
 
-    updateIsImageDownloading(true);
+    updateTweetConfiguration({
+      ...tweetConfiguration,
+      isImageDownloading: true,
+    });
 
     toPng(ref.current, {
       cacheBust: true,
@@ -62,20 +46,26 @@ function App() {
       skipAutoScale: false,
       canvasWidth: 1080,
       canvasHeight: 1080,
-      backgroundColor: tweetBackgroundColor,
+      backgroundColor: tweetConfiguration.tweetBackgroundColor,
       pixelRatio: 4,
     }).then((dataUrl) => {
         const link = document.createElement("a");
-        link.download = "my-image-name.png";
+        link.download = getRandomFilename();
         link.href = dataUrl;
         link.click();
-        updateIsImageDownloading(false);
+        updateTweetConfiguration({
+          ...tweetConfiguration,
+          isImageDownloading: false,
+        });
       })
       .catch((err: any) => {
         console.log(err);
-        updateIsImageDownloading(false);
+        updateTweetConfiguration({
+          ...tweetConfiguration,
+          isImageDownloading: false,
+        });
       });
-  }, [ref, tweetBackgroundColor]);
+  }, [ref, tweetConfiguration]);
 
   return (
     <>
@@ -86,23 +76,19 @@ function App() {
               <div id="exportContainer">
                 <TweetCard
                   author={{
-                    name: tweetUser,
-                    username: tweetUsername,
-                    image: tweetUserAvatar,
-                    isVerified: isUserVerified,
+                    name: tweetConfiguration.tweetUser,
+                    username: tweetConfiguration.tweetUsername,
+                    image: tweetConfiguration.tweetUserAvatar,
+                    isVerified: tweetConfiguration.isUserVerified,
                   }}
-                  tweet={tweetContent}
-                  time={tweetTimestamp}
-                  source={tweetSource}
+                  tweet={tweetConfiguration.tweetContent}
+                  time={tweetConfiguration.tweetTimestamp}
+                  source={tweetConfiguration.tweetSource}
                   fitInsideContainer={false}
-                  className="tweet-card"
                   clickableProfileLink={false}
-                  showEngagement={toBoolean(tweetEngagement)}
-                  engagement={{
-                    likes: 98,
-                    replies: 57,
-                    retweets: 10,
-                  }}
+                  showEngagement={toBoolean(tweetConfiguration.showTweetEngagement)}
+                  className="tweet-card"
+                  engagement={tweetConfiguration.tweetEngagement}
                   style={{fontSize: "14px"}}
                 />
               </div>
@@ -112,25 +98,7 @@ function App() {
       </div>
       <Grid justify="center" grow gutter="xs" style={{marginRight: "0"}}>
         <Grid.Col className="header-container">
-          <Title order={1} align="center">Tweet to image</Title>
-          <Text align="center">Download a Tweet as an Instagram-ready image</Text>
-          <Center>
-            <Anchor href="https://mantine.dev/" target="_blank" align="center" className="anchor">
-              About
-            </Anchor>
-            <Anchor href="https://mantine.dev/" target="_blank" align="center" className="anchor">
-              Have an idea?
-            </Anchor>
-            <Anchor href="https://mantine.dev/" target="_blank" align="center" className="anchor">
-              Report an issue
-            </Anchor>
-            <Anchor href="https://mantine.dev/" target="_blank" align="center" className="anchor">
-              Support
-            </Anchor>
-            <Anchor href="https://mantine.dev/" target="_blank" align="center" className="anchor">
-              Developed by Clyde D'Souza
-            </Anchor>
-          </Center>
+          <AppHeader />
         </Grid.Col>
       </Grid>
       <Grid justify="center" grow gutter="xs" style={{marginRight: "0"}}>
@@ -138,57 +106,81 @@ function App() {
           <form>
             <TextInput
               label="Twitter name"
-              value={tweetUser}
+              value={tweetConfiguration.tweetUser}
               className="field"
-              onChange={(e)=> {updateTweetUser(e.target.value);}}
+              onChange={(e)=> {updateTweetConfiguration({
+                ...tweetConfiguration,
+                tweetUser: e.target.value,
+              });}}
             />
             <TextInput
               label="Twitter username"
-              value={tweetUsername}
+              value={tweetConfiguration.tweetUsername}
               className="field"
               icon={<At size={14} />}
               onChange={(e)=> {
-                updateTweetUsername(e.target.value);
-                updateTweetAvatar(getTwitterAvatarUrl(e.target.value));
+                updateTweetConfiguration({
+                  ...tweetConfiguration,
+                  tweetUsername: e.target.value,
+                  tweetUserAvatar: getTwitterAvatarUrl(e.target.value),
+                });
               }}
             />
             <Switch
               label="I'm verified"
               className="field checkbox-field"
-              checked={isUserVerified}
-              onChange={(e)=> {updateIsUserVerified(e.target.checked);}}
+              checked={tweetConfiguration.isUserVerified}
+              onChange={(e)=> {updateTweetConfiguration({
+                ...tweetConfiguration,
+                isUserVerified: e.target.checked,
+              });}}
             />
             <Textarea
               label="Tweet content"
+              description="A maximum of 280 characters"
               autosize
               minRows={2}
               maxRows={4}
               className="field"
-              value={tweetContent}
-              onChange={(e)=> {updateTweetContent(e.target.value);}}
+              value={tweetConfiguration.tweetContent}
+              maxLength={280}
+              onChange={(e)=> {updateTweetConfiguration({
+                ...tweetConfiguration,
+                tweetContent: e.target.value,
+              });}}
             />
             <Accordion>
               <Accordion.Item label="Advance configuration">
                 <TextInput
                   label="Twitter source"
                   className="field"
-                  value={tweetSource}
-                  onChange={(e)=> {updateTweetSource(e.target.value);}}
+                  value={tweetConfiguration.tweetSource}
+                  onChange={(e)=> {updateTweetConfiguration({
+                    ...tweetConfiguration,
+                    tweetSource: e.target.value,
+                  });}}
                 />
                 <RadioGroup
                   label="Tweet engagement"
-                  onChange={updateTweetEngagement}
-                  value={tweetEngagement}
+                  onChange={(fieldValue)=> {updateTweetConfiguration({
+                    ...tweetConfiguration,
+                    showTweetEngagement: fieldValue,
+                    tweetEngagement: toBoolean(fieldValue) ? getRandomTweetEngagement(): tweetConfiguration.tweetEngagement,
+                  });}}
+                  value={tweetConfiguration.showTweetEngagement}
                   className="field checkbox-field"
                 >
                   <Radio value="false" label="Hide" />
                   <Radio value="true" label="Randomize numbers" />
                 </RadioGroup>
                 <ColorInput
-                  value={tweetBackgroundColor}
+                  value={tweetConfiguration.tweetBackgroundColor}
                   label="Tweet background color"
                   className="field"
-                  onChange={updateTweetBackgroundColor}
+                  onChange={(e)=> {updateTweetConfiguration({
+                    ...tweetConfiguration,
+                    tweetBackgroundColor: e,
+                  });}}
                 />
               </Accordion.Item>
             </Accordion>
@@ -196,31 +188,28 @@ function App() {
               onClick={onButtonClick}
               type={"button"}
               className="field"
-              loading={isImageDownloading}>
+              loading={tweetConfiguration.isImageDownloading}>
               Download tweet as an image
             </Button>
           </form>
         </Grid.Col>
-        <Grid.Col className="tweet-card-container" xs={12} sm={12} md={6} lg={6} xl={6} style={{backgroundColor:`${tweetBackgroundColor}`}}>
+        <Grid.Col className="tweet-card-container" xs={12} sm={12} md={6} lg={6} xl={6}
+          style={{backgroundColor:`${tweetConfiguration.tweetBackgroundColor}`}}>
           <div>
             <TweetCard
               author={{
-                name: tweetUser,
-                username: tweetUsername,
-                image: tweetUserAvatar,
-                isVerified: isUserVerified,
+                name: tweetConfiguration.tweetUser,
+                username: tweetConfiguration.tweetUsername,
+                image: tweetConfiguration.tweetUserAvatar,
+                isVerified: tweetConfiguration.isUserVerified,
               }}
-              tweet={tweetContent}
-              time={tweetTimestamp}
-              source={tweetSource}
+              tweet={tweetConfiguration.tweetContent}
+              time={tweetConfiguration.tweetTimestamp}
+              source={tweetConfiguration.tweetSource}
               fitInsideContainer={false}
               clickableProfileLink={false}
-              showEngagement={toBoolean(tweetEngagement)}
-              engagement={{
-                likes: 98,
-                replies: 57,
-                retweets: 10,
-              }}
+              showEngagement={toBoolean(tweetConfiguration.showTweetEngagement)}
+              engagement={tweetConfiguration.tweetEngagement}
               style={{fontSize: "12px"}}
             />
           </div>
