@@ -15,43 +15,8 @@ import {
 } from "@mantine/core";
 import { At } from "tabler-icons-react";
 import AppHeader from "./components/AppHeader/AppHeader";
-
-const getTwitterAvatarUrl = (username: string): string => {
-  return `https://unavatar.io/twitter/${username}?
-    fallback=https://source.boringavatars.com/marble/350/${username}`;
-};
-
-const toBoolean = (value: string): boolean => {
-  return value.toLowerCase()==="true";
-};
-
-interface ITweetConfiguration {
-  TweetContent: string;
-  TweetSource: string;
-  TweetUser: string;
-  TweetUsername: string;
-  IsUserVerified: boolean;
-  TweetTimestamp: Date;
-  TweetUserAvatar: string;
-  TweetEngagement: string;
-  TweetBackgroundColor: string;
-  IsImageDownloading: boolean;
-}
-
-const getDefaultTwitterConfiguration = (): ITweetConfiguration => {
-  return {
-    TweetContent: "What a radical idea!",
-    TweetSource: "Twitter for iPhone",
-    TweetUser: "Twitter",
-    TweetUsername: "officialtwitter",
-    IsUserVerified: false,
-    TweetTimestamp: new Date(),
-    TweetUserAvatar: getTwitterAvatarUrl("twitter"),
-    TweetEngagement: "false",
-    TweetBackgroundColor: "#1DA1F2",
-    IsImageDownloading: false,
-  };
-};
+import { ITweetConfiguration } from "./interfaces/ITweetConfiguration";
+import { getTwitterAvatarUrl, toBoolean, getDefaultTwitterConfiguration } from "./utils/Util";
 
 function App() {
   const ref = useRef(null);
