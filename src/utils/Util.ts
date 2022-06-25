@@ -13,9 +13,9 @@ export const toBoolean = (value: string): boolean => {
 
 export const getRandomTweetEngagement = (): ITweetEngagement => {
     return {
-        likes: Math.floor(Math.random() * 100),
-        retweets: Math.floor(Math.random() * 100),
-        replies: Math.floor(Math.random() * 100),
+        likes: Math.floor(Math.random() * 1000),
+        retweets: Math.floor(Math.random() * 1000),
+        replies: Math.floor(Math.random() * 1000),
     };
 };
 
