@@ -1,43 +1,36 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import "./App.css";
-import TweetCard from "react-tweet-card";
 import { toPng } from "html-to-image";
-import {
-  Accordion,
-  Button,
-  ColorInput,
-  Grid,
-  Radio,
-  RadioGroup,
-  Switch,
-  Textarea,
-  TextInput,
-} from "@mantine/core";
-import { At } from "tabler-icons-react";
+import { Grid } from "@mantine/core";
 import AppHeader from "./components/AppHeader/AppHeader";
 import { ITweetConfiguration } from "./interfaces/ITweetConfiguration";
-import { getTwitterAvatarUrl, toBoolean, getDefaultTwitterConfiguration, getRandomFilename, getRandomTweetEngagement } from "./utils/Util";
+import { getRandomFilename } from "./utils/Util";
+import {
+  updateTweetTimestamp,
+  updateIsImageDownloading,
+} from "./redux/slice";
+import { useAppDispatch, useAppSelector } from "./redux/hooks";
+import TweetConfiguration from "./components/TweetConfiguration/TweetConfiguration";
+import TweetPreview from "./components/TweetPreview/TweetPreview";
 
 function App() {
+  const tweetConfiguration: ITweetConfiguration = useAppSelector((state) => state.tweetConfiguration);
+  const dispatch = useAppDispatch();
   const ref = useRef(null);
-  const [tweetConfiguration, updateTweetConfiguration] = useState<ITweetConfiguration>(getDefaultTwitterConfiguration());
 
   useEffect(()=> {
     const interval: NodeJS.Timer = setInterval(() => {
-      updateTweetConfiguration({...tweetConfiguration, tweetTimestamp: new Date()});
+      dispatch(updateTweetTimestamp(new Date()));
     }, 1000);
     return () => clearInterval(interval);
-  }, [tweetConfiguration]);
+  }, [dispatch]);
 
   const onButtonClick = useCallback(() => {
     if (ref.current === null) {
       return;
     }
 
-    updateTweetConfiguration({
-      ...tweetConfiguration,
-      isImageDownloading: true,
-    });
+    dispatch(updateIsImageDownloading(true));
 
     toPng(ref.current, {
       cacheBust: true,
@@ -53,19 +46,13 @@ function App() {
         link.download = getRandomFilename();
         link.href = dataUrl;
         link.click();
-        updateTweetConfiguration({
-          ...tweetConfiguration,
-          isImageDownloading: false,
-        });
+        dispatch(updateIsImageDownloading(false));
       })
       .catch((err: any) => {
         console.log(err);
-        updateTweetConfiguration({
-          ...tweetConfiguration,
-          isImageDownloading: false,
-        });
+        dispatch(updateIsImageDownloading(false));
       });
-  }, [ref, tweetConfiguration]);
+  }, [ref, tweetConfiguration, dispatch]);
 
   return (
     <>
@@ -74,23 +61,7 @@ function App() {
           <div className="middle">
             <div className="inner">
               <div id="exportContainer">
-                <TweetCard
-                  author={{
-                    name: tweetConfiguration.tweetUser,
-                    username: tweetConfiguration.tweetUsername,
-                    image: tweetConfiguration.tweetUserAvatar,
-                    isVerified: tweetConfiguration.isUserVerified,
-                  }}
-                  tweet={tweetConfiguration.tweetContent}
-                  time={tweetConfiguration.tweetTimestamp}
-                  source={tweetConfiguration.tweetSource}
-                  fitInsideContainer={false}
-                  clickableProfileLink={false}
-                  showEngagement={toBoolean(tweetConfiguration.showTweetEngagement)}
-                  className="tweet-card"
-                  engagement={tweetConfiguration.tweetEngagement}
-                  style={{fontSize: "14px"}}
-                />
+                <TweetPreview className="tweet-card"customStyle={{fontSize: "14px"}} />
               </div>
             </div>
           </div>
@@ -103,115 +74,12 @@ function App() {
       </Grid>
       <Grid justify="center" grow gutter="xs" style={{marginRight: "0"}}>
         <Grid.Col className="form-container" xs={12} sm={12} md={6} lg={6} xl={6}>
-          <form>
-            <TextInput
-              label="Twitter name"
-              value={tweetConfiguration.tweetUser}
-              className="field"
-              onChange={(e)=> {updateTweetConfiguration({
-                ...tweetConfiguration,
-                tweetUser: e.target.value,
-              });}}
-            />
-            <TextInput
-              label="Twitter username"
-              value={tweetConfiguration.tweetUsername}
-              className="field"
-              icon={<At size={14} />}
-              onChange={(e)=> {
-                updateTweetConfiguration({
-                  ...tweetConfiguration,
-                  tweetUsername: e.target.value,
-                  tweetUserAvatar: getTwitterAvatarUrl(e.target.value),
-                });
-              }}
-            />
-            <Switch
-              label="I'm verified"
-              className="field checkbox-field"
-              checked={tweetConfiguration.isUserVerified}
-              onChange={(e)=> {updateTweetConfiguration({
-                ...tweetConfiguration,
-                isUserVerified: e.target.checked,
-              });}}
-            />
-            <Textarea
-              label="Tweet content"
-              description="A maximum of 280 characters"
-              autosize
-              minRows={2}
-              maxRows={4}
-              className="field"
-              value={tweetConfiguration.tweetContent}
-              maxLength={280}
-              onChange={(e)=> {updateTweetConfiguration({
-                ...tweetConfiguration,
-                tweetContent: e.target.value,
-              });}}
-            />
-            <Accordion>
-              <Accordion.Item label="Advance configuration">
-                <TextInput
-                  label="Twitter source"
-                  className="field"
-                  value={tweetConfiguration.tweetSource}
-                  onChange={(e)=> {updateTweetConfiguration({
-                    ...tweetConfiguration,
-                    tweetSource: e.target.value,
-                  });}}
-                />
-                <RadioGroup
-                  label="Tweet engagement"
-                  onChange={(fieldValue)=> {updateTweetConfiguration({
-                    ...tweetConfiguration,
-                    showTweetEngagement: fieldValue,
-                    tweetEngagement: toBoolean(fieldValue) ? getRandomTweetEngagement(): tweetConfiguration.tweetEngagement,
-                  });}}
-                  value={tweetConfiguration.showTweetEngagement}
-                  className="field checkbox-field"
-                >
-                  <Radio value="false" label="Hide" />
-                  <Radio value="true" label="Randomize numbers" />
-                </RadioGroup>
-                <ColorInput
-                  value={tweetConfiguration.tweetBackgroundColor}
-                  label="Tweet background color"
-                  className="field"
-                  onChange={(e)=> {updateTweetConfiguration({
-                    ...tweetConfiguration,
-                    tweetBackgroundColor: e,
-                  });}}
-                />
-              </Accordion.Item>
-            </Accordion>
-            <Button
-              onClick={onButtonClick}
-              type={"button"}
-              className="field"
-              loading={tweetConfiguration.isImageDownloading}>
-              Download tweet as an image
-            </Button>
-          </form>
+          <TweetConfiguration handleButtonClick={onButtonClick} />
         </Grid.Col>
         <Grid.Col className="tweet-card-container" xs={12} sm={12} md={6} lg={6} xl={6}
           style={{backgroundColor:`${tweetConfiguration.tweetBackgroundColor}`}}>
           <div>
-            <TweetCard
-              author={{
-                name: tweetConfiguration.tweetUser,
-                username: tweetConfiguration.tweetUsername,
-                image: tweetConfiguration.tweetUserAvatar,
-                isVerified: tweetConfiguration.isUserVerified,
-              }}
-              tweet={tweetConfiguration.tweetContent}
-              time={tweetConfiguration.tweetTimestamp}
-              source={tweetConfiguration.tweetSource}
-              fitInsideContainer={false}
-              clickableProfileLink={false}
-              showEngagement={toBoolean(tweetConfiguration.showTweetEngagement)}
-              engagement={tweetConfiguration.tweetEngagement}
-              style={{fontSize: "12px"}}
-            />
+            <TweetPreview customStyle={{fontSize: "12px"}} />
           </div>
         </Grid.Col>
       </Grid>

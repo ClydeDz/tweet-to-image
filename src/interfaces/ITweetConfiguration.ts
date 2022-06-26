@@ -9,7 +9,7 @@ export interface ITweetConfiguration {
     tweetTimestamp: Date;
     tweetUserAvatar: string;
     showTweetEngagement: string;
-    tweetEngagement?: ITweetEngagement;
+    tweetEngagement: ITweetEngagement;
     tweetBackgroundColor: string;
     isImageDownloading: boolean;
 }
