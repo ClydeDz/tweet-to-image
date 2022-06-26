@@ -10,14 +10,6 @@
   padding: 2%;
 }
 
-.field {
-  margin: 9px 0;
-}
-
-.checkbox-field {
-  margin: 18px 0 14px 0;
-}
-
 .outer {
   display: table;
   position: absolute;
@@ -36,20 +28,4 @@
   margin-left: auto;
   margin-right: auto;
   width: 400px;
-}
-
-.anchor {
-  margin-right: 9px;
-}
-
-.anchor:last-child {
-  margin-right: 0;
-}
-
-.mantine-Accordion-itemTitle > button:first-child {
-  padding: 14px 8px;
-}
-
-.mantine-Accordion-label {
-  font-size: 14px;
 }

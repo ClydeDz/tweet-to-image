@@ -1,4 +1,5 @@
 import { Anchor, Center, Title, Text } from "@mantine/core";
+import "./AppHeader.css";
 
 const AppHeader = () => {
     return (

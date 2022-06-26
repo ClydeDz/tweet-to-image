@@ -61,7 +61,7 @@ function App() {
           <div className="middle">
             <div className="inner">
               <div id="exportContainer">
-                <TweetPreview className="tweet-card"customStyle={{fontSize: "14px"}} />
+                <TweetPreview className="tweet-card" customStyle={{fontSize: "14px"}} />
               </div>
             </div>
           </div>
