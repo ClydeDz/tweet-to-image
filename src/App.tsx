@@ -33,7 +33,7 @@ import {
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 
 function App() {
-  const tweetConfigurationState: ITweetConfiguration = useAppSelector((state) => state.tweetConfiguration);
+  const tweetConfiguration: ITweetConfiguration = useAppSelector((state) => state.tweetConfiguration);
   const dispatch = useAppDispatch();
   const ref = useRef(null);
 
@@ -58,7 +58,7 @@ function App() {
       skipAutoScale: false,
       canvasWidth: 1080,
       canvasHeight: 1080,
-      backgroundColor: tweetConfigurationState.tweetBackgroundColor,
+      backgroundColor: tweetConfiguration.tweetBackgroundColor,
       pixelRatio: 4,
     }).then((dataUrl) => {
         const link = document.createElement("a");
@@ -71,7 +71,7 @@ function App() {
         console.log(err);
         dispatch(updateIsImageDownloading(false));
       });
-  }, [ref, tweetConfigurationState, dispatch]);
+  }, [ref, tweetConfiguration, dispatch]);
 
   return (
     <>
@@ -82,19 +82,19 @@ function App() {
               <div id="exportContainer">
                 <TweetCard
                   author={{
-                    name: tweetConfigurationState.tweetUser,
-                    username: tweetConfigurationState.tweetUsername,
-                    image: tweetConfigurationState.tweetUserAvatar,
-                    isVerified: tweetConfigurationState.isUserVerified,
+                    name: tweetConfiguration.tweetUser,
+                    username: tweetConfiguration.tweetUsername,
+                    image: tweetConfiguration.tweetUserAvatar,
+                    isVerified: tweetConfiguration.isUserVerified,
                   }}
-                  tweet={tweetConfigurationState.tweetContent}
-                  time={tweetConfigurationState.tweetTimestamp}
-                  source={tweetConfigurationState.tweetSource}
+                  tweet={tweetConfiguration.tweetContent}
+                  time={tweetConfiguration.tweetTimestamp}
+                  source={tweetConfiguration.tweetSource}
                   fitInsideContainer={false}
                   clickableProfileLink={false}
-                  showEngagement={toBoolean(tweetConfigurationState.showTweetEngagement)}
+                  showEngagement={toBoolean(tweetConfiguration.showTweetEngagement)}
                   className="tweet-card"
-                  engagement={tweetConfigurationState.tweetEngagement}
+                  engagement={tweetConfiguration.tweetEngagement}
                   style={{fontSize: "14px"}}
                 />
               </div>
@@ -112,7 +112,7 @@ function App() {
           <form>
             <TextInput
               label="Twitter name"
-              value={tweetConfigurationState.tweetUser}
+              value={tweetConfiguration.tweetUser}
               className="field"
               onChange={(e)=> {
                 dispatch(updateTweetUser(e.target.value));
@@ -120,7 +120,7 @@ function App() {
             />
             <TextInput
               label="Twitter username"
-              value={tweetConfigurationState.tweetUsername}
+              value={tweetConfiguration.tweetUsername}
               className="field"
               icon={<At size={14} />}
               onChange={(e)=> {
@@ -131,7 +131,7 @@ function App() {
             <Switch
               label="I'm verified"
               className="field checkbox-field"
-              checked={tweetConfigurationState.isUserVerified}
+              checked={tweetConfiguration.isUserVerified}
               onChange={(e)=> {
                 dispatch(updateIsUserVerified(e.target.checked));
               }}
@@ -143,7 +143,7 @@ function App() {
               minRows={2}
               maxRows={4}
               className="field"
-              value={tweetConfigurationState.tweetContent}
+              value={tweetConfiguration.tweetContent}
               maxLength={280}
               onChange={(e)=> {
                 dispatch(updateTweetContent(e.target.value));
@@ -154,7 +154,7 @@ function App() {
                 <TextInput
                   label="Twitter source"
                   className="field"
-                  value={tweetConfigurationState.tweetSource}
+                  value={tweetConfiguration.tweetSource}
                   onChange={(e)=> {
                     dispatch(updateTweetSource(e.target.value));
                   }}
@@ -164,17 +164,17 @@ function App() {
                   onChange={(fieldValue)=> {
                     dispatch(updateShowTweeEngagement(fieldValue));
                     dispatch(updateTweetEngagement(toBoolean(fieldValue) ?
-                      getRandomTweetEngagement(): tweetConfigurationState.tweetEngagement
+                      getRandomTweetEngagement(): tweetConfiguration.tweetEngagement
                     ));
                   }}
-                  value={tweetConfigurationState.showTweetEngagement}
+                  value={tweetConfiguration.showTweetEngagement}
                   className="field checkbox-field"
                 >
                   <Radio value="false" label="Hide" />
                   <Radio value="true" label="Randomize numbers" />
                 </RadioGroup>
                 <ColorInput
-                  value={tweetConfigurationState.tweetBackgroundColor}
+                  value={tweetConfiguration.tweetBackgroundColor}
                   label="Tweet background color"
                   className="field"
                   onChange={(e)=> {
@@ -187,28 +187,28 @@ function App() {
               onClick={onButtonClick}
               type={"button"}
               className="field"
-              loading={tweetConfigurationState.isImageDownloading}>
+              loading={tweetConfiguration.isImageDownloading}>
               Download tweet as an image
             </Button>
           </form>
         </Grid.Col>
         <Grid.Col className="tweet-card-container" xs={12} sm={12} md={6} lg={6} xl={6}
-          style={{backgroundColor:`${tweetConfigurationState.tweetBackgroundColor}`}}>
+          style={{backgroundColor:`${tweetConfiguration.tweetBackgroundColor}`}}>
           <div>
             <TweetCard
               author={{
-                name: tweetConfigurationState.tweetUser,
-                username: tweetConfigurationState.tweetUsername,
-                image: tweetConfigurationState.tweetUserAvatar,
-                isVerified: tweetConfigurationState.isUserVerified,
+                name: tweetConfiguration.tweetUser,
+                username: tweetConfiguration.tweetUsername,
+                image: tweetConfiguration.tweetUserAvatar,
+                isVerified: tweetConfiguration.isUserVerified,
               }}
-              tweet={tweetConfigurationState.tweetContent}
-              time={tweetConfigurationState.tweetTimestamp}
-              source={tweetConfigurationState.tweetSource}
+              tweet={tweetConfiguration.tweetContent}
+              time={tweetConfiguration.tweetTimestamp}
+              source={tweetConfiguration.tweetSource}
               fitInsideContainer={false}
               clickableProfileLink={false}
-              showEngagement={toBoolean(tweetConfigurationState.showTweetEngagement)}
-              engagement={tweetConfigurationState.tweetEngagement}
+              showEngagement={toBoolean(tweetConfiguration.showTweetEngagement)}
+              engagement={tweetConfiguration.tweetEngagement}
               style={{fontSize: "12px"}}
             />
           </div>
