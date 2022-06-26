@@ -1,17 +1,17 @@
 import { useCallback, useEffect, useRef } from "react";
 import "./App.css";
-import TweetCard from "react-tweet-card";
 import { toPng } from "html-to-image";
 import { Grid } from "@mantine/core";
 import AppHeader from "./components/AppHeader/AppHeader";
 import { ITweetConfiguration } from "./interfaces/ITweetConfiguration";
-import { toBoolean, getRandomFilename } from "./utils/Util";
+import { getRandomFilename } from "./utils/Util";
 import {
   updateTweetTimestamp,
   updateIsImageDownloading,
 } from "./redux/slice";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import TweetConfiguration from "./components/TweetConfiguration/TweetConfiguration";
+import TweetPreview from "./components/TweetPreview/TweetPreview";
 
 function App() {
   const tweetConfiguration: ITweetConfiguration = useAppSelector((state) => state.tweetConfiguration);
@@ -61,23 +61,7 @@ function App() {
           <div className="middle">
             <div className="inner">
               <div id="exportContainer">
-                <TweetCard
-                  author={{
-                    name: tweetConfiguration.tweetUser,
-                    username: tweetConfiguration.tweetUsername,
-                    image: tweetConfiguration.tweetUserAvatar,
-                    isVerified: tweetConfiguration.isUserVerified,
-                  }}
-                  tweet={tweetConfiguration.tweetContent}
-                  time={tweetConfiguration.tweetTimestamp}
-                  source={tweetConfiguration.tweetSource}
-                  fitInsideContainer={false}
-                  clickableProfileLink={false}
-                  showEngagement={toBoolean(tweetConfiguration.showTweetEngagement)}
-                  className="tweet-card"
-                  engagement={tweetConfiguration.tweetEngagement}
-                  style={{fontSize: "14px"}}
-                />
+                <TweetPreview className="tweet-card"customStyle={{fontSize: "14px"}} />
               </div>
             </div>
           </div>
@@ -95,22 +79,7 @@ function App() {
         <Grid.Col className="tweet-card-container" xs={12} sm={12} md={6} lg={6} xl={6}
           style={{backgroundColor:`${tweetConfiguration.tweetBackgroundColor}`}}>
           <div>
-            <TweetCard
-              author={{
-                name: tweetConfiguration.tweetUser,
-                username: tweetConfiguration.tweetUsername,
-                image: tweetConfiguration.tweetUserAvatar,
-                isVerified: tweetConfiguration.isUserVerified,
-              }}
-              tweet={tweetConfiguration.tweetContent}
-              time={tweetConfiguration.tweetTimestamp}
-              source={tweetConfiguration.tweetSource}
-              fitInsideContainer={false}
-              clickableProfileLink={false}
-              showEngagement={toBoolean(tweetConfiguration.showTweetEngagement)}
-              engagement={tweetConfiguration.tweetEngagement}
-              style={{fontSize: "12px"}}
-            />
+            <TweetPreview customStyle={{fontSize: "12px"}} />
           </div>
         </Grid.Col>
       </Grid>
