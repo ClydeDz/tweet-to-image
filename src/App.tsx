@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import "./App.css";
 import { toPng } from "html-to-image";
 import { Grid } from "@mantine/core";
@@ -26,16 +26,18 @@ const App = () => {
     return () => clearInterval(interval);
   }, [dispatch]);
 
-  const toPngOptions: Options = {
-    cacheBust: true,
-    width: 1080,
-    height: 1080,
-    skipAutoScale: false,
-    canvasWidth: 1080,
-    canvasHeight: 1080,
-    backgroundColor: tweetConfiguration.tweetBackgroundColor,
-    pixelRatio: 4,
-  };
+  const toPngOptions: Options = useMemo(() => {
+    return {
+      cacheBust: true,
+      width: 1080,
+      height: 1080,
+      skipAutoScale: false,
+      canvasWidth: 1080,
+      canvasHeight: 1080,
+      backgroundColor: tweetConfiguration.tweetBackgroundColor,
+      pixelRatio: 4,
+    };
+  }, [tweetConfiguration]);
 
   const onButtonClick = useCallback(() => {
     if (ref.current === null) {
@@ -55,10 +57,10 @@ const App = () => {
         console.log(err);
         dispatch(updateIsImageDownloading(false));
       });
-  }, [ref, tweetConfiguration, dispatch]);
+  }, [ref, dispatch, toPngOptions]);
 
-  const HiddenTweetPreview = () => {
-    return (
+  return (
+    <>
       <div style={{display: "none"}}>
         <div className="outer" ref={ref}>
           <div className="middle">
@@ -70,21 +72,11 @@ const App = () => {
           </div>
         </div>
       </div>
-    );
-  };
-
-  const Header = () => {
-    return (
       <Grid justify="center" grow gutter="xs" style={{marginRight: "0"}}>
         <Grid.Col className="header-container">
           <AppHeader />
         </Grid.Col>
       </Grid>
-    );
-  };
-
-  const TweetConfigurationAndPreview = () => {
-    return (
       <Grid justify="center" grow gutter="xs" style={{marginRight: "0"}}>
         <Grid.Col className="form-container" xs={12} sm={12} md={6} lg={6} xl={6}>
           <TweetConfiguration handleButtonClick={onButtonClick} />
@@ -96,14 +88,6 @@ const App = () => {
           </div>
         </Grid.Col>
       </Grid>
-    );
-  };
-
-  return (
-    <>
-      <HiddenTweetPreview />
-      <Header />
-      <TweetConfigurationAndPreview />
     </>
   );
 };
