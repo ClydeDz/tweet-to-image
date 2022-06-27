@@ -1,4 +1,4 @@
-import "../../App.css";
+import "./TweetConfiguration.css";
 import {
   Accordion,
   Button,

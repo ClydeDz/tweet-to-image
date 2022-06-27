@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import "./App.css";
 import { toPng } from "html-to-image";
 import { Grid } from "@mantine/core";
@@ -12,8 +12,9 @@ import {
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import TweetConfiguration from "./components/TweetConfiguration/TweetConfiguration";
 import TweetPreview from "./components/TweetPreview/TweetPreview";
+import { Options } from "html-to-image/lib/options";
 
-function App() {
+const App = () => {
   const tweetConfiguration: ITweetConfiguration = useAppSelector((state) => state.tweetConfiguration);
   const dispatch = useAppDispatch();
   const ref = useRef(null);
@@ -25,14 +26,8 @@ function App() {
     return () => clearInterval(interval);
   }, [dispatch]);
 
-  const onButtonClick = useCallback(() => {
-    if (ref.current === null) {
-      return;
-    }
-
-    dispatch(updateIsImageDownloading(true));
-
-    toPng(ref.current, {
+  const toPngOptions: Options = useMemo(() => {
+    return {
       cacheBust: true,
       width: 1080,
       height: 1080,
@@ -41,7 +36,17 @@ function App() {
       canvasHeight: 1080,
       backgroundColor: tweetConfiguration.tweetBackgroundColor,
       pixelRatio: 4,
-    }).then((dataUrl) => {
+    };
+  }, [tweetConfiguration]);
+
+  const onButtonClick = useCallback(() => {
+    if (ref.current === null) {
+      return;
+    }
+
+    dispatch(updateIsImageDownloading(true));
+
+    toPng(ref.current, toPngOptions).then((dataUrl) => {
         const link = document.createElement("a");
         link.download = getRandomFilename();
         link.href = dataUrl;
@@ -52,7 +57,7 @@ function App() {
         console.log(err);
         dispatch(updateIsImageDownloading(false));
       });
-  }, [ref, tweetConfiguration, dispatch]);
+  }, [ref, dispatch, toPngOptions]);
 
   return (
     <>
@@ -61,7 +66,7 @@ function App() {
           <div className="middle">
             <div className="inner">
               <div id="exportContainer">
-                <TweetPreview className="tweet-card"customStyle={{fontSize: "14px"}} />
+                <TweetPreview className="tweet-card" customStyle={{fontSize: "14px"}} />
               </div>
             </div>
           </div>
@@ -85,6 +90,6 @@ function App() {
       </Grid>
     </>
   );
-}
+};
 
 export default App;

@@ -1,9 +1,10 @@
 import { Anchor, Center, Title, Text } from "@mantine/core";
+import "./AppHeader.css";
 
 const AppHeader = () => {
     return (
         <>
-            <Title order={1} align="center">Tweet to image</Title>
+            <Title order={1} align="center">Tweet to Image</Title>
             <Text align="center">Download a Tweet as an Instagram-ready image</Text>
             <Center>
             <Anchor href="https://github.com/ClydeDz/tweet-to-image/issues/new/choose"

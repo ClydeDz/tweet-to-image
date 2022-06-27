@@ -22,8 +22,7 @@ const TweetPreview = (props: ITweetPreviewProps) => {
             tweet={tweetConfiguration.tweetContent}
             time={tweetConfiguration.tweetTimestamp}
             source={tweetConfiguration.tweetSource}
-            fitInsideContainer={false}
-            clickableProfileLink={false}
+            theme="light"
             showEngagement={toBoolean(tweetConfiguration.showTweetEngagement)}
             engagement={tweetConfiguration.tweetEngagement}
             style={customStyle}
