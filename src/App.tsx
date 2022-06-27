@@ -12,8 +12,9 @@ import {
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import TweetConfiguration from "./components/TweetConfiguration/TweetConfiguration";
 import TweetPreview from "./components/TweetPreview/TweetPreview";
+import { Options } from "html-to-image/lib/options";
 
-function App() {
+const App = () => {
   const tweetConfiguration: ITweetConfiguration = useAppSelector((state) => state.tweetConfiguration);
   const dispatch = useAppDispatch();
   const ref = useRef(null);
@@ -25,6 +26,17 @@ function App() {
     return () => clearInterval(interval);
   }, [dispatch]);
 
+  const toPngOptions: Options = {
+    cacheBust: true,
+    width: 1080,
+    height: 1080,
+    skipAutoScale: false,
+    canvasWidth: 1080,
+    canvasHeight: 1080,
+    backgroundColor: tweetConfiguration.tweetBackgroundColor,
+    pixelRatio: 4,
+  };
+
   const onButtonClick = useCallback(() => {
     if (ref.current === null) {
       return;
@@ -32,16 +44,7 @@ function App() {
 
     dispatch(updateIsImageDownloading(true));
 
-    toPng(ref.current, {
-      cacheBust: true,
-      width: 1080,
-      height: 1080,
-      skipAutoScale: false,
-      canvasWidth: 1080,
-      canvasHeight: 1080,
-      backgroundColor: tweetConfiguration.tweetBackgroundColor,
-      pixelRatio: 4,
-    }).then((dataUrl) => {
+    toPng(ref.current, toPngOptions).then((dataUrl) => {
         const link = document.createElement("a");
         link.download = getRandomFilename();
         link.href = dataUrl;
@@ -54,8 +57,8 @@ function App() {
       });
   }, [ref, tweetConfiguration, dispatch]);
 
-  return (
-    <>
+  const HiddenTweetPreview = () => {
+    return (
       <div style={{display: "none"}}>
         <div className="outer" ref={ref}>
           <div className="middle">
@@ -67,11 +70,21 @@ function App() {
           </div>
         </div>
       </div>
+    );
+  };
+
+  const Header = () => {
+    return (
       <Grid justify="center" grow gutter="xs" style={{marginRight: "0"}}>
         <Grid.Col className="header-container">
           <AppHeader />
         </Grid.Col>
       </Grid>
+    );
+  };
+
+  const TweetConfigurationAndPreview = () => {
+    return (
       <Grid justify="center" grow gutter="xs" style={{marginRight: "0"}}>
         <Grid.Col className="form-container" xs={12} sm={12} md={6} lg={6} xl={6}>
           <TweetConfiguration handleButtonClick={onButtonClick} />
@@ -83,8 +96,16 @@ function App() {
           </div>
         </Grid.Col>
       </Grid>
+    );
+  };
+
+  return (
+    <>
+      <HiddenTweetPreview />
+      <Header />
+      <TweetConfigurationAndPreview />
     </>
   );
-}
+};
 
 export default App;
