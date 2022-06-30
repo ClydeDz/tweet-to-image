@@ -25,6 +25,7 @@ import {
   updateDownloadedImageSize,
 } from "../../redux/slice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { DownloadedImageSize } from "../../enums/DownloadedImageSize";
 
 export interface ITweetConfigurationProps {
     handleButtonClick: () => void;
@@ -108,10 +109,10 @@ const TweetConfiguration = (props: ITweetConfigurationProps) => {
                 value={tweetConfiguration.downloadedImageSize}
                 className="field checkbox-field"
               >
-                <Radio value="1" label="1080 x 1080px" />
-                <Radio value="2" label="2160 x 2160px" />
-                <Radio value="3" label="3240 x 3240px" />
-                <Radio value="4" label="4320 x 4320px" />
+                <Radio value={DownloadedImageSize.SIZE_1080} label="1080 x 1080px" />
+                <Radio value={DownloadedImageSize.SIZE_2160} label="2160 x 2160px" />
+                <Radio value={DownloadedImageSize.SIZE_3240} label="3240 x 3240px" />
+                <Radio value={DownloadedImageSize.SIZE_4320} label="4320 x 4320px" />
               </RadioGroup>
               <ColorInput
                 value={tweetConfiguration.tweetBackgroundColor}

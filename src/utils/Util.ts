@@ -1,4 +1,5 @@
 import { adjectives, animals, colors, uniqueNamesGenerator } from "unique-names-generator";
+import { DownloadedImageSize } from "../enums/DownloadedImageSize";
 import { ITweetConfiguration } from "../interfaces/ITweetConfiguration";
 import { ITweetEngagement } from "../interfaces/ITweetEngagement";
 
@@ -32,7 +33,7 @@ export const getDefaultTwitterConfiguration = (): ITweetConfiguration => {
         tweetEngagement: getRandomTweetEngagement(),
         tweetBackgroundColor: "#1DA1F2",
         isImageDownloading: false,
-        downloadedImageSize: "4",
+        downloadedImageSize: DownloadedImageSize.SIZE_4320,
     };
 };
 
