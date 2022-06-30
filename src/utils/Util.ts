@@ -32,6 +32,7 @@ export const getDefaultTwitterConfiguration = (): ITweetConfiguration => {
         tweetEngagement: getRandomTweetEngagement(),
         tweetBackgroundColor: "#1DA1F2",
         isImageDownloading: false,
+        downloadedImageSize: "4",
     };
 };
 

@@ -42,6 +42,9 @@ export const tweetConfigurationSlice = createSlice({
     updateIsImageDownloading: (state, action: PayloadAction<boolean>) => {
       return {...state, isImageDownloading: action.payload};
     },
+    updateDownloadedImageSize: (state, action: PayloadAction<string>) => {
+      return {...state, downloadedImageSize: action.payload};
+    },
   },
 });
 
@@ -57,6 +60,7 @@ export const {
   updateTweetEngagement,
   updateTweetBackgroundColor,
   updateIsImageDownloading,
+  updateDownloadedImageSize,
 } = tweetConfigurationSlice.actions;
 
 export default tweetConfigurationSlice.reducer;

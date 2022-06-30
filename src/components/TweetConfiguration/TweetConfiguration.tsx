@@ -22,6 +22,7 @@ import {
   updateShowTweeEngagement,
   updateTweetEngagement,
   updateTweetBackgroundColor,
+  updateDownloadedImageSize,
 } from "../../redux/slice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 
@@ -98,6 +99,19 @@ const TweetConfiguration = (props: ITweetConfigurationProps) => {
               >
                 <Radio value="false" label="Hide" />
                 <Radio value="true" label="Randomize numbers" />
+              </RadioGroup>
+              <RadioGroup
+                label="Downloaded image size"
+                onChange={(fieldValue)=> {
+                  dispatch(updateDownloadedImageSize(fieldValue));
+                }}
+                value={tweetConfiguration.downloadedImageSize}
+                className="field checkbox-field"
+              >
+                <Radio value="1" label="1080 x 1080px" />
+                <Radio value="2" label="2160 x 2160px" />
+                <Radio value="3" label="3240 x 3240px" />
+                <Radio value="4" label="4320 x 4320px" />
               </RadioGroup>
               <ColorInput
                 value={tweetConfiguration.tweetBackgroundColor}

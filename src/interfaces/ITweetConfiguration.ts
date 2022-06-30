@@ -12,4 +12,5 @@ export interface ITweetConfiguration {
     tweetEngagement: ITweetEngagement;
     tweetBackgroundColor: string;
     isImageDownloading: boolean;
+    downloadedImageSize: string;
 }

@@ -35,7 +35,7 @@ const App = () => {
       canvasWidth: 1080,
       canvasHeight: 1080,
       backgroundColor: tweetConfiguration.tweetBackgroundColor,
-      pixelRatio: 4,
+      pixelRatio: Number(tweetConfiguration.downloadedImageSize),
     };
   }, [tweetConfiguration]);
 
