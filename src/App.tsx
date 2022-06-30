@@ -29,8 +29,8 @@ const App = () => {
   const toPngOptions: Options = useMemo(() => {
     return {
       cacheBust: true,
-      width: 1080,
-      height: 1080,
+      width: 650,
+      height: 650,
       skipAutoScale: false,
       canvasWidth: 1080,
       canvasHeight: 1080,
